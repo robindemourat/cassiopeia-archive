@@ -7,7 +7,8 @@ angular.module('cassiopeiaApp', [
   'ngRoute',
   'ngAnimate',
   'ui.bootstrap',
-  'ngFileUpload'
+  'ngFileUpload',
+  'angulike'
 ])
   .config(function ($locationProvider) {
     $locationProvider.html5Mode(true);

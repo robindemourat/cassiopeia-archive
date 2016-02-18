@@ -38,9 +38,10 @@ angular.module( 'cassiopeiaApp' )
             ;
 
         var flashTooltip = function( tweet, auto ){
-          if( onUpdate ){
+          if( onUpdate || !scope.externalInfo ){
             return;
           }
+
 
           tweetTooltip
             .style( 'z-index', 10 )
@@ -83,16 +84,16 @@ angular.module( 'cassiopeiaApp' )
                          } ), pos;
 
          if( element[0][0] ){
-           pos = element[0][0].getBoundingClientRect();
 
            var w = tweetTooltip[0][0].offsetWidth,
                h = tweetTooltip[0][0].offsetHeight;
 
-           var top = ( auto === true )?pos.top - h/2:d3.event.offsetY - h/2;
-           var right = ( auto === true )?50:window.innerWidth - d3.event.offsetX +20;
+           // var top = ( auto === true )?pos.top - h/2:d3.event.offsetY - h/2;
+           var top = ( auto === true )?pos.top + h/2:d3.event.offsetY + h/2;
+           var right = ( auto === true )?50:window.innerWidth - d3.event.offsetX +50;
 
            if( right > window.innerWidth - w ){
-               right = window.innerWidth - d3.event.offsetX - w - 20
+               right = window.innerWidth - d3.event.offsetX - w - 50;
            }
 
            if( top < 20 ){
@@ -189,10 +190,10 @@ angular.module( 'cassiopeiaApp' )
                   .attr( 'class', 'mini-shape' )
                     .attr( 'd', 'M -3 0 L 0 -3 L 3 0 L 0 3 Z' );
 
-              if( scope.externalInfo == 'false' ){
+              // if( scope.externalInfo == 'false' ){
                   enter.on( 'mouseover', flashTooltip );
                   enter.on( 'mousemove', flashTooltip );
-              }
+              // }
 
 
 
@@ -217,6 +218,8 @@ angular.module( 'cassiopeiaApp' )
 
 
               children.exit().remove();
+
+
             } );//end of children update
           }else{
               d3.selectAll( '.cassiopeia-tweet' ).remove();

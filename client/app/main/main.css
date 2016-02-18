@@ -269,6 +269,19 @@ Information pannel top-left
     margin-left : 4em;
 }
 
+.zoom-controls-container{
+    position : absolute;
+    right : 3em;
+    top : 3em;
+    text-transform : uppercase;
+    opacity : .5;
+}
+
+.zoom-controls-container:hover
+{
+    opacity : 1;
+}
+
 /*
     Options pannel layout
 */
@@ -334,6 +347,7 @@ Information pannel top-left
 .local-timeline-container
 {
     height: 50%;
+    position: relative;
 }
 
 .mini-timeline .local-timeline-container
@@ -484,6 +498,41 @@ Left pannel specific styles
 }
 
 
+/* Zoom specific styles */
+.zoom-controls-container .glyphicon
+{
+    cursor : pointer;
+}
+
+.zoom-controls-container .glyphicon:hover
+{
+    transform : scale(1.2);
+    -webkit-transform : scale(1.2);
+    -moz-transform : scale(1.2);
+}
+
+.zoom-controls-container .slider-container
+{
+    background: rgba(249, 223, 194, .4);
+    width : 5em;
+    margin : 0 .5em 0 .5em;
+    height : 1em;
+    display : inline-block;
+    position : relative;
+    cursor : pointer;
+}
+
+
+.zoom-controls-container .slider-indicator
+{
+    position : absolute;
+    left : 0;
+    top : 0;
+    height : 100%;
+    width : 10%;
+    background: rgba(249, 223, 194, .9);
+}
+
 /* Right pannel specific styles */
 
 .options-toggle
@@ -501,6 +550,13 @@ Left pannel specific styles
 
     border-left: 1px solid rgba(249, 223, 194, .4);
     background: black;
+}
+
+.options-toggle:hover,
+.options-params-toggle:hover
+{
+    background: rgba(249, 223, 194, .4);
+    color : black;
 }
 
 .options-toggle-val
@@ -528,6 +584,20 @@ Left pannel specific styles
     margin: 1em 0 .5em 0;
 
     color: rgba(249, 233, 194, .4);
+}
+
+
+.share-container
+{
+
+    margin : 2em 0 2em 0;
+    float : left;
+}
+.share-container span
+{
+    /*float : left;*/
+    margin-right : .5em;
+    float : left;
 }
 
 .about-content-header h4
@@ -1047,6 +1117,36 @@ form.add-color input:focus
 }
 
 /* TIMELINES */
+
+.seek-btn
+{
+    background : black;
+    border : 1px solid rgb(249, 223, 194);
+    border-radius : 50%;
+    width : 2em;
+    height : 2em;
+    opacity : .5;
+    position : absolute;
+    top : 1em;
+    outline : none!important;
+}
+
+#seek-backward
+{
+    left : 2.5em;
+}
+
+#seek-forward
+{
+    right : .5em;
+}
+
+
+.seek-btn:hover{
+    opacity : 1;
+    background : rgb(249, 223, 194);
+    color : black;
+}
 
 .barsContainer
 {

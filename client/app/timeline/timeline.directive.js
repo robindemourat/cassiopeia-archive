@@ -5,13 +5,15 @@ angular.module('cassiopeiaApp')
     return {
       restrict: 'EAC',
       scope : {
-        shortTransitions : '@shorttransitions',
-        mediumTransitions : '@mediumtransitions',
-        longTransitions : '@longtransitions',
+        shortTransitions : '=',
+        mediumTransitions : '=',
+        longTransitions : '=',
         dataEvt : '@dataevt',
         dataProperty : '@dataproperty',
         brushOutputEvt : '@brushoutputevt',
-        brushInputEvt : '@brushinputevt'
+        brushInputEvt : '@brushinputevt',
+        minimumSpan : '=',
+        maximumSpan : '='
       },
       link: function (scope, element, attrs) {
 
@@ -31,8 +33,6 @@ angular.module('cassiopeiaApp')
             month = day * 31,
             //brush setting
             brush, //brush object, must be global
-            min_brush = minute * 30, //brush length is limited to avoid to have too few nodes to display
-            max_brush = day, //brush length is limited to avoid to have too much nodes to display
             brush_prev_begin, //used to come back to previous brush extent if limit is exceeded
             brush_prev_end,
             brushScale = d3.scale.linear().range([0, angular.element(element).width()]),
@@ -95,16 +95,15 @@ angular.module('cassiopeiaApp')
                 limit,
                 end;
 
-            if(range > max_brush){
+            if(range > scope.maximumSpan){
 
               limit = true;
-              end = extent[0] + max_brush;
+              end = extent[0] + scope.maximumSpan;
 
             }else end = extent[1];
 
             //refuse if too small
-            if(range < min_brush){
-              // end = extent[0] + min_brush;
+            if(range < scope.minimumSpan){
               updateBrush({begin_abs : brush_prev_begin, end_abs : brush_prev_end});
               barsContainer
                 .select('.brush .extent')
@@ -168,7 +167,9 @@ angular.module('cassiopeiaApp')
           }
 
 
-          var bars = barsContainer.selectAll('.bar').data(data.timeslots);
+          var bars = barsContainer.selectAll('.bar').data(data.timeslots, function(slot){
+            return slot.begin_abs;
+          });
 
           var enter = bars
             .enter()
@@ -221,7 +222,10 @@ angular.module('cassiopeiaApp')
                 .style('opacity', 1)
                 .style('z-index', 5)
                 .html(function(){
-                  var output = data.count +' tweets from '+formatTooltip(new Date(data.begin_abs)) + ' to ' + formatTooltip(new Date(data.end_abs));
+                  var output = data.count +' tweets about #COP21 from '+formatTooltip(new Date(data.begin_abs)) + ' to ' + formatTooltip(new Date(data.end_abs));
+                  if(data.count == 1){
+                    output = 'One single tweet about #COP21 from '+formatTooltip(new Date(data.begin_abs)) + ' to ' + formatTooltip(new Date(data.end_abs));
+                  }
                   if(data.colors.length){
                     for(var n in data.colors){
                       var col = data.colors[n];
@@ -265,7 +269,7 @@ angular.module('cassiopeiaApp')
             .on('mouseout', onBarEndHover)
             .on('click', function(d){
               // min timespan = 1 hour minute
-              if(d.end_abs - d.begin_abs >= min_brush){
+              if(d.end_abs - d.begin_abs >= scope.minimumSpan){
                 $rootScope.$broadcast('clickPeriod', d);
               }
             });
@@ -293,8 +297,22 @@ angular.module('cassiopeiaApp')
             })
             ;
 
-          bars.exit()
-            .remove();
+          bars
+            .exit()
+              .attr('opacity', 1)
+                .transition()
+                  .duration(scope.longTransitions)
+                    .attr('opacity', 0.1)
+                      .remove();
+          bars
+            .exit()
+              .select('.main-bar')
+              .transition()
+              .duration(scope.mediumTransitions)
+              .attr('y', function(){
+                return visPercentHeight + '%';
+              })
+              .attr('height', 0)
 
 
           //STACKS UPDATE

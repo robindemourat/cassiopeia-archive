@@ -24,15 +24,15 @@ angular.module('cassiopeiaApp')
           }else if(range >= 12 * hour){
             unit = 'hour';
             interval = 3;
-            formatting = '%d %b %Hh';
+            formatting = '%Hh';
           }else if(range >= 2 * hour){
             unit = 'minute';
             interval = 30;
-            formatting = '%d %b %H:%M';
+            formatting = '%H:%M';
           }else if(range >= 20 * minute){
             unit = 'minute';
             interval = 10;
-            formatting = '%d %b %H:%M';
+            formatting = '%H:%M';
           }else if(range >= 3 * minute){
             unit = 'minute';
             interval = 1;
@@ -41,6 +41,45 @@ angular.module('cassiopeiaApp')
             unit = 'second';
             interval = 10;
             formatting = '%H:%M:%S';
+          }
+
+          return {
+            scale : d3.time[unit],
+            interval : interval,
+            formatting : d3.time.format(formatting)
+          }
+    };
+
+    factory.computeGlobalTicksType = function(min, max){
+          var range = max - min, unit, interval, formatting;
+          if(range >= 1 * month){
+            unit = 'day';
+            interval = 11;
+            formatting = '%d %b %Y';
+          }else if(range >= 3 * day){
+            unit = 'day';
+            interval = 1;
+            formatting = '%d %b %Y';
+          }else if(range >= 12 * hour){
+            unit = 'hour';
+            interval = 3;
+            formatting = '%d %b %Y, %Hh';
+          }else if(range >= 2 * hour){
+            unit = 'minute';
+            interval = 30;
+            formatting = '%d %b %Y, %H:%M';
+          }else if(range >= 20 * minute){
+            unit = 'minute';
+            interval = 10;
+            formatting = '%d %b %Y, %H:%M';
+          }else if(range >= 3 * minute){
+            unit = 'minute';
+            interval = 1;
+            formatting = '%d %b, %Y%H:%M';
+          }else{
+            unit = 'second';
+            interval = 10;
+            formatting = '%d %b %Y, %H:%M:%S';
           }
 
           return {

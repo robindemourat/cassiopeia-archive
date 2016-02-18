@@ -79,19 +79,18 @@ angular.module('cassiopeiaApp')
 
 
     var initFunctions =  function(){
-        $http
-            .get('assets/cassiopeia-data/colors.csv')
-            .success(updateColors)
-            .error(function(e){
-                $log.error('colors input error : ',e);
-            });
+
 
         $http
             .get('api/globaltimeline')
             .success(function(d){
                 if(d.timeslots){
                     $rootScope.$broadcast("globalDataUpdate", d);
-                    $scope.dataAvailable = true;
+                    $scope.absoluteBegin = d.begin_abs;
+                    $scope.absoluteEnd = d.end_abs;
+                    $timeout(function(){
+                        $scope.dataAvailable = true;
+                    });
                 }
             });
 
@@ -110,6 +109,19 @@ angular.module('cassiopeiaApp')
             var initBrush = [randomDate, randomDate + initialDuration];
             $scope.getLocalData(initBrush);
         }
+
+        //get colors from search
+        if(search.colors){
+            $scope.colors = deUrifyColors(search.colors);
+            console.info('got colors from url', $scope.colors);
+        }else{
+            $http
+                .get('assets/cassiopeia-data/colors.csv')
+                .success(updateColors)
+                .error(function(e){
+                    $log.error('colors input error : ',e);
+                });
+            }
     };
 
     var initVariables = function(){
@@ -126,6 +138,9 @@ angular.module('cassiopeiaApp')
         $scope.displayedTweetsLength = $scope.displayedTweetsSpan;//computed length of tweet list
         $scope.tempFilterValue = '';
 
+        $scope.minimumSpan = min * 30;
+        $scope.maximumSpan = day;
+
         $scope.filters = [];
         $scope.colors = [];
         $scope.tweetsList = [];
@@ -135,13 +150,21 @@ angular.module('cassiopeiaApp')
         if(!data||!data.tweets)return;
 
 
-        $scope.dataAvailable = true;
+        $timeout(function(){
+            $scope.dataAvailable = true;
+        });
+
 
         if(!data.processed){
             data.tweets = prepareTweets(data.tweets, $scope.colors);
             data.users = updateUsers(data.tweets, data.usersList, $scope.colors);
-            data.timeline = updateTimelineProfile(data.tweets, $scope.fromDate, $scope.toDate, $scope.colors);
+            data.timeline = updateTimelineProfile(data.tweets, /*$scope.fromDate, $scope.toDate*/undefined, undefined, $scope.colors);
+            $scope.fromDate = data.timeline.begin_abs;
+            $scope.toDate = data.timeline.end_abs;
+            $scope.activeTimeSpan = $scope.toDate - $scope.fromDate;
+            $scope.zoomLevel = $scope.activeTimeSpan / ($scope.maximumSpan - $scope.minimumSpan);
         }
+
 
 
         for(var i in data.tweets){
@@ -164,7 +187,7 @@ angular.module('cassiopeiaApp')
         }
         $timeout(function(){
             $scope.loading = false;
-        })
+        });
         //console.log('local update');
 
         if(data.timeline.begin_abs && data.timeline.end_abs){
@@ -200,6 +223,54 @@ angular.module('cassiopeiaApp')
                 console.error('init local data request error : ', e);
                 $scope.loading = false;
             });
+    }
+
+    /*
+    TIME TRAVELLING
+    */
+
+    $scope.seekForward = function(){
+        var wanted = $scope.fromDate + $scope.activeTimeSpan/4;
+        if(wanted <= $scope.absoluteEnd){
+            $scope.getLocalData([wanted, wanted + $scope.activeTimeSpan]);
+        }
+    }
+
+    $scope.seekBackward = function(){
+        var wanted = $scope.fromDate - $scope.activeTimeSpan/4;
+        if(wanted >= $scope.absoluteBegin){
+            $scope.getLocalData([wanted, wanted + $scope.activeTimeSpan]);
+        }
+    }
+
+    $scope.zoomTo = function(newZoom){
+        var newSpan = ($scope.maximumSpan - $scope.minimumSpan)* newZoom;
+        if(newSpan >= $scope.minimumSpan && newSpan <= $scope.maximumSpan){
+            var middle = $scope.fromDate + ($scope.toDate - $scope.fromDate) / 2;
+            var newBegining = middle - newSpan/2;
+            var newEnd = middle + newSpan/2;
+            console.log(newBegining, $scope.absoluteBegin);
+            if(newBegining >= $scope.absoluteBegin && newEnd <= $scope.absoluteEnd){
+                $scope.zoomLevel = newZoom;
+                $scope.getLocalData([newBegining, newEnd]);
+            }
+        }
+    }
+
+    $scope.zoomByClick = function(event){
+        var x = event.offsetX,
+            width = angular.element(event.target).width(),
+            rapport= x/width;
+
+        $scope.zoomTo(1 - rapport);
+    }
+
+    $scope.zoomOut = function(){
+        $scope.zoomTo($scope.zoomLevel + .1);
+    }
+
+    $scope.zoomIn = function(){
+        $scope.zoomTo($scope.zoomLevel - .1);
     }
 
 
@@ -453,6 +524,38 @@ angular.module('cassiopeiaApp')
     COLORS SETTING
     */
 
+    var deUrifyColors = function(str){
+        str = decodeURIComponent(str);
+        var colors = str.split('|||');
+        var output = [];
+        colors.forEach(function(colorStr){
+            var vals = colorStr.split('||');
+            var color = {};
+            color.expressions = vals[0].split('|').map(function(exp){
+                return exp.trim();
+            });
+            color.color = (vals[2])?vals[1].trim():undefined;
+            color.name = (vals[2])?vals[2].trim():undefined;
+            output.push(color);
+        });
+        return output;
+    }
+
+    var urifyColors = function(colors){
+        var str = '';
+        colors.forEach(function(color, i){
+            var colorStr = '';
+            colorStr+= color.expressions.join('|') + '||';
+            colorStr += color.color + '||';
+            colorStr += color.name;
+            if(i != colors.length - 1){
+                colorStr += '|||';
+            }
+            str += colorStr;
+        });
+        return encodeURIComponent(str);
+    }
+
     $scope.removeColor = function(index){
         $scope.colors.splice(index, 1);
         updateColors();
@@ -500,6 +603,10 @@ angular.module('cassiopeiaApp')
         if($scope.tweetsList.length){
             onLocalUpdate({tweets:$scope.tweetsList});
         }
+
+        var uriColors = urifyColors($scope.colors);
+        console.log('uriColors ', uriColors);
+        $location.search('colors', uriColors);
 
         setTimeout(function(){
             $scope.$apply();
@@ -631,12 +738,12 @@ angular.module('cassiopeiaApp')
 
     var updateDisplayedDates = function(d){
         var timeline = d.timeline;
-        var ticking = DateUtils.computeTicksType(timeline.begin_abs, timeline.end_abs);
+        var ticking = DateUtils.computeGlobalTicksType(timeline.begin_abs, timeline.end_abs);
         var span = timeline.end_abs - timeline.begin_abs;
         //set to live tweet if the users asks the end of timeline
         var now = new Date();
-        $scope.displayedBegin = (ticking.formatting(new Date(timeline.begin_abs))) + ' 2015';
-        $scope.displayedEnd = (ticking.formatting(new Date(timeline.end_abs))) + ' 2015';
+        $scope.displayedBegin = (ticking.formatting(new Date(timeline.begin_abs)));
+        $scope.displayedEnd = (ticking.formatting(new Date(timeline.end_abs)));
     }
 
 
@@ -653,6 +760,11 @@ angular.module('cassiopeiaApp')
             var yiq = ((r*299)+(g*587)+(b*114))/1000;
             return (yiq >= 128) ? '#493132' : '#ffdfc2';
     };
+
+
+    $scope.makeShareUrl = function(){
+        return window.location.href.split('?')[0];
+    }
 
     /*
     DATA PROCESSING UTILS

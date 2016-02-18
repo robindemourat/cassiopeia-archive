@@ -62,6 +62,22 @@
 
   </div><!-- END cartel-container : containing general information -->
 
+
+  <!-- zoom container -->
+  <div class="zoom-controls-container">
+    <span>Time zoom</span>
+    <span class="glyphicon glyphicon-minus-sign animate" ng-click="zoomOut()"></span>
+    <span class="slider-container" ng-click="zoomByClick($event)">
+      <span
+          ng-click="$event.stopPropagation()"
+          class="slider-indicator animate"
+          ng-style="{'left': (100 - zoomLevel * 100) + '%'}"
+      ></span>
+    </span>
+    <span class="glyphicon glyphicon-plus-sign animate" ng-click="zoomIn()"></span>
+  </div>
+  <!-- END zoom container -->
+
   <!-- timeline-container : interactive and global timeline container -->
   <div
     class="timeline-container animate animate"
@@ -79,13 +95,22 @@
         dataevt="localDataUpdate"
         dataproperty="timeline"
         brushoutputevt="newtimespan"
-        shorttransitions = {{params.shortTransitions}}
-        mediumtransitions = {{params.mediumTransitions}}
-        longtransitions = {{params.longTransitions}}
+        short-transitions = "params.shortTransitions"
+        medium-transitions = "params.mediumTransitions"
+        long-transitions = "params.longTransitions"
+        minimum-span="minimumSpan"
+        maximum-span="maxiumSpan"
       >
 
       </svg><!--END : local-timeline-holder : actual holder of the visualisation for timeline one -->
-
+      <!--seek forward and backward buttons-->
+      <button class="seek-btn animate" id="seek-backward" role="navigation" ng-if="!loading" ng-click="seekBackward()">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+      </button>
+      <button class="seek-btn animate" id="seek-forward" role="navigation" ng-if="!loading" ng-click="seekForward()">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+      </button>
+      <!--END seek forward and backward buttons-->
     </div><!-- END local-timeline-container -->
 
     <!-- timeline-mini-toggle -->
@@ -107,9 +132,11 @@
         dataevt="globalDataUpdate"
         brushoutputevt="newtimespan"
         brushinputevt="localDataUpdate"
-        shorttransitions = {{params.shortTransitions}}
-        mediumtransitions = {{params.mediumTransitions}}
-        longtransitions = {{params.longTransitions}}
+        short-transitions = "params.shortTransitions"
+        medium-transitions = "params.mediumTransitions"
+        long-transitions = "params.longTransitions"
+        minimum-span = "minimumSpan"
+        maximum-span = "maximumSpan"
 
         id="global-timeline"
       >
@@ -168,6 +195,24 @@
                 ng-click="about=false;optionsVisible = false"
               ></span></h4>
             </div>
+
+            <div
+            ng-show="optionsVisible"
+            class="share-container"
+          >
+                <span
+                fb-like
+                >
+                </span>
+                <span
+                tweet="'Cassiopeia :'+query+' tweets visualization'"
+                tweet-url="makeShareUrl()"
+                ></span>
+                <span
+                google-plus
+                ></span>
+          </div>
+
             <div class="about-content-body">
               <div>Cassiopeia aims at visualizing and navigating into a twitter feed related to a specific query, and to follow the activity of the twitter accounts involved in the conversation, each represented by a constellation of visual objects. You can navigate into the twitter feed's history by brushing the histograms presented below the main visualization. Specific tweets analysis are allowed by the possibility to color tweets and users related to specific keywords or regular expressions.<br><br></div>
               <div>It has been developed by <a href="https://twitter.com/robindemourat">Robin de Mourat</a> and <a href="https://twitter.com/optichiasm">Donato Ricci</a>, with the essential help of <a href="http://www.medialab.sciences-po.fr/fr/people/benjamin-ooghe-tabanou/">Benjamin Ooghe-Tabanou</a>, at <a href="http://dhmonade.net/">MONADE Rennes 2</a> and <a href="http://www.medialab.sciences-po.fr/fr/">médialab Sciences Po</a>. Cassiopeia is the little sister of a former experiment named <a href="http://www.densitydesign.org/research/andromeda-twitterwall/">Andromeda</a> and made with <a href="http://www.densitydesign.org/person/michele-mauri/">Michele Mauri</a> and <a href="https://www.behance.net/valeriopellegrini">Valerio Pellegrini</a>.</div>

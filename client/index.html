@@ -20,7 +20,7 @@
 
     <meta name="author" content=""/>
     <meta name="keywords" content="twitter, cop21, visualization"/>
-    <meta name="description" content="Live and old tweets visualization about COP 21 on twitter, per user" />
+    <meta name="description" content="Twitter archive visualization - #COP21 April-June 2015" />
     <meta name="viewport" content="user-scalable=no,width=device-width" />
 
 
@@ -28,7 +28,7 @@
     <meta name="twitter:card" value="summary">
     <meta name="twitter:site" content="https://cassiopeia-cop21.herokuapp.com">
     <meta name="twitter:title" content="Cassiopeia - COP21">
-    <meta name="twitter:description" content="Live and old tweets visualization about COP 21 on twitter, per user">
+    <meta name="twitter:description" content="Twitter archive visualization - #COP21 April-June 2015">
     <!--<meta name="twitter:creator" content="@robindemourat">-->
     <!-- todo : Twitter Summary card images must be at least 200x200px -->
     <meta name="twitter:image" content="https://cassiopeia-cop21.herokuapp.com/twitter_img.jpg">
@@ -36,7 +36,7 @@
 
     <!-- META GOOGLE + -->
     <meta itemprop="name" content="Cassiopeia - COP21">
-    <meta itemprop="description" content="Live and old tweets visualization about COP 21 on twitter, per user">
+    <meta itemprop="description" content="Twitter archive visualization - #COP21 April-June 2015">
     <meta itemprop="image" content="https://cassiopeia-cop21.herokuapp.com/intro_res/google_img.jpg">
     <!-- END META GOOGLE + -->
 
@@ -45,7 +45,7 @@
     <meta property="og:title" content="Cassiopeia - COP21"/>
     <meta property="og:type" content="website"/>
     <meta property="og:url" content="https://cassiopeia-cop21.herokuapp.com/"/>
-    <meta property="og:description" content="Live and old tweets visualization about COP 21 on twitter, per user"/>
+    <meta property="og:description" content="Twitter archive visualization - #COP21 April-June 2015"/>
     <meta property="og:image" content="https://cassiopeia-cop21.herokuapp.com/facebook_img.jpg"/>
     <!-- END META OPEN GRAPH / FACEBOOK -->
 
@@ -69,7 +69,9 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <div ng-view="" kill-pointer-events="transitionning || loading"></div>
+    <div
+      ng-view=""
+    ></div>
 
 
 
@@ -90,6 +92,7 @@
       <script src="../bower_components/lodash/dist/lodash.compat.js"></script>
       <script src="../bower_components/d3/d3.js"></script>
       <script src="../bower_components/ng-file-upload/ng-file-upload.js"></script>
+      <script src="../bower_components/angulike/angulike.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
 
