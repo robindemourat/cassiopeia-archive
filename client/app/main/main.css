@@ -35,6 +35,20 @@ a:link
     color: inherit;
 }
 
+table
+{
+    width : 100%;
+}
+
+tr:first-of-type
+{
+    background : rgba(249,223,194,.1);
+}
+
+td{
+    padding-right : .5em;
+}
+
 ::-webkit-input-placeholder
 {
     font-style: italic;
@@ -176,7 +190,7 @@ body
 {
     width: 100%;
     height: 60%;
-    padding: 2em 1em 2em 2em;
+    padding: 10% 1em 0 2em;
 }
 
 .cassiopeia-container.expanded
@@ -258,6 +272,11 @@ Information pannel top-left
     Options pannel layout
 */
 
+.options-items-container
+{
+    height : 100%;
+}
+
 .options-pannel
 {
     overflow: hidden;
@@ -276,7 +295,7 @@ Information pannel top-left
     overflow-x: hidden;
     overflow-y: auto;
 
-    max-height: 300px;
+    max-height: 90%;
 }
 
 .options-tweets-list-wrapper
@@ -548,16 +567,61 @@ Left pannel specific styles
     opacity: .8;
 }
 
-.add-color:last-of-type
+div.add-color:last-of-type
 {
     border-top : 2px solid rgba(249, 223, 194, .4);
     border-bottom : 2px solid rgba(249, 223, 194, .4);
     padding : 1em 0 1em 0;
 }
 
-.add-color:last-of-type:hover .add-text
+div.add-color:last-of-type:hover .add-text
 {
     padding-left : 20%;
+}
+
+form.add-color
+{
+    border-top : 2px solid rgba(249, 223, 194, .4);
+    padding-top : 2em;
+    flex-direction : column;
+}
+
+
+form.add-color span
+{
+    margin-right : 2em;
+}
+form.add-color .glyphicon
+{
+    width : 100%!important;
+    padding-top : 1em;
+    padding-bottom : 1em;
+}
+
+form.add-color .glyphicon-plus-sign::after
+{
+    content : 'add this new color to vis';
+    padding-left : 1em;
+}
+
+form.add-color .glyphicon-remove-sign::after
+{
+    content : 'don\'t add new color to vis';
+    padding-left : 1em;
+}
+
+form.add-color input
+{
+    margin-left : 2em;
+    margin-right : 4em;
+    padding : .5em 0 .5em 0;
+}
+
+form.add-color input:focus
+{
+    color : black;
+    background: rgba(249, 223, 194, .8) ;
+    padding-left : .5em;
 }
 
 .options-pannel .add-color>span{
@@ -573,6 +637,7 @@ Left pannel specific styles
 .options-pannel .add-color .color-text
 {
     flex-grow: 5;
+    padding : 0 1em 0 1em;
 }
 
 .options-pannel .add-color .query

@@ -75,6 +75,7 @@ angular.module('cassiopeiaApp')
             $scope.getLocalData([$scope.fromDate, $scope.toDate]);
             $scope.loading = true;
         });
+
     };
 
 
@@ -128,6 +129,7 @@ angular.module('cassiopeiaApp')
     var onLocalUpdate = function(data){
         if(!data||!data.tweets)return;
 
+        console.log('updating locally, colors :', $scope.colors);
 
         $scope.dataAvailable = true;
 
@@ -152,7 +154,6 @@ angular.module('cassiopeiaApp')
 
         $rootScope.$broadcast('localDataUpdate', data);
         $scope.tweetsList = data.tweets;
-        $scope.filteredTweets = $scope.tweetsList;
         updateFilters();
         if(!$scope.onUserInteraction){
             $scope.displayedTweets = $scope.filteredTweets.slice(0, $scope.displayedTweetsLength);
@@ -415,9 +416,11 @@ angular.module('cassiopeiaApp')
 
         var expression;
 
+
         for(var i in tweets){
             for(var j in colors){
-                if(tweets[i].color)break;
+                if(tweets[i].color)
+                    break;
                 for(var k in colors[j].expressions){
                     expression = colors[j].expressions[k];
                     if(tweets[i].user_name.indexOf(expression) > -1 || tweets[i].user_screen_name.indexOf(expression)> -1){
@@ -448,16 +451,20 @@ angular.module('cassiopeiaApp')
         updateColors();
     }
 
-    $scope.addColor = function(expr, col){
+    $scope.addColor = function(expr, col, name){
+        if(!expr || !col || !name){
+            return;
+        }
         $scope.tempColorExpression = "";
         $scope.tempColorName = "";
-        $scope.colors.push({expression: [expr], color : col, name : expr});
+        $scope.tempLegend = "";
+        $scope.colors.push({expressions: [expr], color : col, name : name});
         updateColors();
     }
 
     var updateColors = function(content){
         //update content
-        $log.info('updating colors');
+        //csv content
         if(content){
             var vals = content.split('\n');
             for(var i = 1; i < vals.length ; i++){
@@ -475,8 +482,6 @@ angular.module('cassiopeiaApp')
                     continue;
                 }
 
-
-
                 $scope.colors.push({
                     name : name,
                     color : color,
@@ -485,15 +490,13 @@ angular.module('cassiopeiaApp')
             }
         }
 
-
-        //update view
-
-        if(!$scope.$$phase)
-            $scope.$apply();
-
         if($scope.tweetsList.length){
             onLocalUpdate({tweets:$scope.tweetsList});
         }
+
+        setTimeout(function(){
+            $scope.$apply();
+        });
     }
 
     /* color file upload */
@@ -537,13 +540,15 @@ angular.module('cassiopeiaApp')
                 break;
 
                 case 'term':
-
+                    // console.log('before', $scope.filteredTweets.length);
                     $scope.filteredTweets = $scope.filteredTweets.filter(function(d){
                         return d.text.toLowerCase().indexOf(filter.value.toLowerCase())> -1;
                     });
+                    // console.log('after', $scope.filteredTweets.length);
                 break;
             }
         }
+        $scope.displayedTweets = $scope.filteredTweets.slice(0, $scope.displayedTweetsLength);
     }
 
     var addFilter = function(filter){
