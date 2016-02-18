@@ -16,9 +16,9 @@ Cassiopeia-archive is scaffolded with yeoman-angular-fullstack generator.
 
 Back-end uses express and oboe for data management.
 
-For this long-term, lightweight version, data is contained in simple json files being streamed and processed by the server, and then repurposed and served through two API endpoints.
+For this long-term, lightweight version, data is stored in simple json files being streamed and processed by the server, and then repurposed and served through two API endpoints.
 
-Front-end uses angular & d3 - in which a specific "nova visualization" layout has been written (reusable !).
+Front-end uses angular & d3 - in which a specific "nova visualization" layout has been written (reusable).
 
 # API
 
@@ -104,6 +104,6 @@ If you'd want to reuse the app, here is what a tweet must look like in your json
 
 Designed and developped by Robin de Mourat (Université Rennes 2) and Donato Ricci (Sciences Po Paris) with the help of Benjamin Ooghe-Tabanou and his incredible [gazouilloire](https://github.com/medialab/gazouilloire) for tweets retrieving.
 
-Cassiopeia was first tested in May 2015  during the event ["make it work"](http://www.nanterre-amandiers.com/2014-2015/make-it-work-le-theatre-des-negociations/), a huge-scale students' simulation of the climate negociation that have been held in Paris some months later.
+Cassiopeia was first tested in May 2015  during the event ["make it work"](http://www.nanterre-amandiers.com/2014-2015/make-it-work-le-theatre-des-negociations/), a huge-scale students' simulation of the COP21 climate negotiations that have been held in Paris some months later.
 
 Cassiopeia is the little sister of a former experiment named [Andromeda](http://www.densitydesign.org/research/andromeda-twitterwall/) and made with [Michele Mauri](http://www.densitydesign.org/person/michele-mauri) and [Valerio Pellegrini](https://www.behance.net/valeriopellegrini).

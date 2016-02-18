@@ -155,6 +155,7 @@ angular.module('cassiopeiaApp')
         });
 
 
+
         if(!data.processed){
             data.tweets = prepareTweets(data.tweets, $scope.colors);
             data.users = updateUsers(data.tweets, data.usersList, $scope.colors);
@@ -249,7 +250,6 @@ angular.module('cassiopeiaApp')
             var middle = $scope.fromDate + ($scope.toDate - $scope.fromDate) / 2;
             var newBegining = middle - newSpan/2;
             var newEnd = middle + newSpan/2;
-            console.log(newBegining, $scope.absoluteBegin);
             if(newBegining >= $scope.absoluteBegin && newEnd <= $scope.absoluteEnd){
                 $scope.zoomLevel = newZoom;
                 $scope.getLocalData([newBegining, newEnd]);
@@ -600,16 +600,17 @@ angular.module('cassiopeiaApp')
             }
         }
 
-        if($scope.tweetsList.length){
-            onLocalUpdate({tweets:$scope.tweetsList});
-        }
+
 
         var uriColors = urifyColors($scope.colors);
-        console.log('uriColors ', uriColors);
         $location.search('colors', uriColors);
 
         setTimeout(function(){
             $scope.$apply();
+            if($scope.tweetsList.length){
+                console.log('updated colors, launching onupdate')
+                onLocalUpdate({tweets:$scope.tweetsList});
+            }
         });
     }
 
