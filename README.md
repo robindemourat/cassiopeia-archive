@@ -5,7 +5,7 @@ Cassiopeia (archive version)
 
 Cassiopeia aims at visualizing and navigating into a twitter feed related to a specific query, and to follow the activity of the twitter accounts involved in the conversation, each represented by a constellation of visual objects. You can navigate into the twitter feed's history by brushing the histograms presented below the main visualization. Specific tweets analysis are allowed by the possibility to color tweets and users related to specific keywords or regular expressions.
 
-It comes in several versions :
+Cassiopeia comes in several versions :
 * archive, static file-based (this one)
 * [event-oriented, live-feed visualization](https://github.com/robindemourat/cassiopeia)
 * [read-only live-feed app, purposed for embedding](https://github.com/robindemourat/tdn-cassiopeia-client)
@@ -14,17 +14,19 @@ It comes in several versions :
 
 Cassiopeia-archive is scaffolded with yeoman-angular-fullstack generator.
 
-For this long-term, lightweight version, data is contained in simple json files being loaded and processed by the server, and served through two API endpoints.
+Back-end uses express and oboe for data management.
 
-Front-end uses angular & d3 - with which a specific "nova visualization" layout has been written (reusable !).
+For this long-term, lightweight version, data is contained in simple json files being streamed and processed by the server, and then repurposed and served through two API endpoints.
+
+Front-end uses angular & d3 - in which a specific "nova visualization" layout has been written (reusable !).
 
 # API
 
-Cors enabled, enjoy.
+CORS enabled, enjoy but be nice.
 
 ## Get global timeline
 
-For this archive version, it's just serving a json file (but if needed  the app can generate it on the go - check /server/app.js)
+For this archive version, the app is just serving the content of a json file (but if needed  the app can generate it on the go - check /server/app.js)
 
 ```
 GET api/globaltimeline
@@ -37,7 +39,7 @@ GET api/globaltimeline
 GET /api/slice/:from/:to/
 ```
 
-Note: from and to have to be specified as absolute time integers.
+Note: 'from' and 'to' parameters have to be absolute time integers.
 
 # Reproduce
 
