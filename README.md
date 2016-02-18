@@ -7,28 +7,37 @@ Cassiopeia aims at visualizing and navigating into a twitter feed related to a s
 
 It comes in several versions :
 * archive, static file-based (this one)
-* event-oriented, live-feed visualization (cassiopeia-tdn)
-* read-only live-feed app, purposed for embedding (cassiopeia-client)
+* [event-oriented, live-feed visualization](https://github.com/robindemourat/cassiopeia)
+* [read-only live-feed app, purposed for embedding](https://github.com/robindemourat/tdn-cassiopeia-client)
 
-# Tech
+# Tech choices
 
 Cassiopeia-archive is scaffolded with yeoman-angular-fullstack generator.
-For this long-term, lightweight version, data is contained in simple json files being loaded and processed by the server.
 
-Front-end uses angular & d3.
+For this long-term, lightweight version, data is contained in simple json files being loaded and processed by the server, and served through two API endpoints.
+
+Front-end uses angular & d3 - with which a specific "nova visualization" layout has been written (reusable !).
 
 # API
 
 Cors enabled, enjoy.
+
+## Get global timeline
+
+For this archive version, it's just serving a json file (but if needed  the app can generate it on the go - check /server/app.js)
 
 ```
 GET api/globaltimeline
 ```
 
 
+## Get a slice of tweets
+
 ```
-GET /api/slice/:from/:to/:colors?
+GET /api/slice/:from/:to/
 ```
+
+Note: from and to have to be specified as absolute time integers.
 
 # Reproduce
 
@@ -65,11 +74,11 @@ cd dist
 ```
 
 
-## note on data
+## Note on data
 
 From this repo the json file containing the array of tweets is substracted.
 
-If you'd want to reuse the app, here is what a tweet must look like in your json file;
+If you'd want to reuse the app, here is what a tweet must look like in your json file:
 ```
 {
     created_at : (string)(date),

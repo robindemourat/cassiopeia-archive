@@ -7,3 +7,4 @@
 .tmp
 .idea
 /client/bower_components/
+/bower_components/
