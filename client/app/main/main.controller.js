@@ -34,7 +34,6 @@ angular.module('cassiopeiaApp')
         });
 
         $rootScope.$on('newtimespan', function(e, timespan){
-            console.log('new timespan : ', timespan);
             $scope.getLocalData(timespan);
         })
 
@@ -96,15 +95,21 @@ angular.module('cassiopeiaApp')
                 }
             });
 
+        var search = $location.search();
+        //get timespan from search params
+        if(search.from && search.to){
+            $scope.getLocalData([search.from, search.to]);
+        //or get random timespan
+        }else{
+            var initialDuration = hour * 6;
+            var begining = new Date("May 1, 2015");
+            var end = new Date("June 21, 2015");
+            var durationSpan = end.getTime() - begining.getTime() - initialDuration;
+            var randomDate = begining.getTime() + parseInt(durationSpan * Math.random());
 
-        var initialDuration = hour * 6;
-        var begining = new Date("May 1, 2015");
-        var end = new Date("June 21, 2015");
-        var durationSpan = end.getTime() - begining.getTime() - initialDuration;
-        var randomDate = begining.getTime() + parseInt(durationSpan * Math.random());
-
-        var initBrush = [randomDate, randomDate + initialDuration];
-        $scope.getLocalData(initBrush);
+            var initBrush = [randomDate, randomDate + initialDuration];
+            $scope.getLocalData(initBrush);
+        }
     };
 
     var initVariables = function(){
@@ -129,7 +134,6 @@ angular.module('cassiopeiaApp')
     var onLocalUpdate = function(data){
         if(!data||!data.tweets)return;
 
-        console.log('updating locally, colors :', $scope.colors);
 
         $scope.dataAvailable = true;
 
@@ -163,7 +167,10 @@ angular.module('cassiopeiaApp')
         })
         //console.log('local update');
 
-
+        if(data.timeline.begin_abs && data.timeline.end_abs){
+            $location.search('from',  data.timeline.begin_abs);
+            $location.search('to',  data.timeline.end_abs);
+        }
 
         updateDisplayedDates(data);
 

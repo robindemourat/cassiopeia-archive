@@ -266,6 +266,7 @@ Information pannel top-left
     z-index: 3;
 
     pointer-events: none;
+    margin-left : 4em;
 }
 
 /*
