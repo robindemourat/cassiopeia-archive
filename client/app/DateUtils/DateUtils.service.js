@@ -15,7 +15,7 @@ angular.module('cassiopeiaApp')
           var range = max - min, unit, interval, formatting;
           if(range >= 1 * month){
             unit = 'day';
-            interval = 10;
+            interval = 11;
             formatting = '%d %b';
           }else if(range >= 3 * day){
             unit = 'day';
