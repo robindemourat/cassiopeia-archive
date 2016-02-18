@@ -3,3 +3,7 @@
 /e2e/
 /node_modules/
 /server/data/tweets-cop21.min.json
+/public/
+.tmp
+.idea
+/client/bower_components/
