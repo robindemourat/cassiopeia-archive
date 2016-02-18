@@ -117,7 +117,7 @@ angular.module( 'cassiopeiaApp' )
             onUpdate = false;
           },scope.longTransitions * 2 );
 
-          showChildren = ( data.users.length < 800 )?true:false;
+          showChildren = ( data.users.length < 1500 )?true:false;
           begin = data.timeline.begin_abs,
           end = data.timeline.end_abs,
           users = ( showChildren )?
@@ -173,9 +173,12 @@ angular.module( 'cassiopeiaApp' )
             els.each( function( d,i ){
               var data = d;
               var vals = data.values.slice( 1 );
+              // console.log(vals);
               var children = d3.select( this )
                                 .selectAll( '.cassiopeia-tweet' )
-                                  .data( vals );
+                                  .data( vals, function(d, ind){
+                                    return d.user_id + ind;
+                                  } );
 
               var enter = children
                             .enter()
@@ -197,9 +200,9 @@ angular.module( 'cassiopeiaApp' )
 
 
 
-              children.selectAll( '.connection' ).remove();
-
-              children
+              // children.selectAll( '.connection' ).remove();
+              enter
+              // children
                 .append( 'line' )
                   .attr( 'class', 'connection' )
                     .attr( 'x1', 0 )
@@ -215,6 +218,17 @@ angular.module( 'cassiopeiaApp' )
                 .style( 'fill', function( t ){
                     return ( t.color )?t.color:'#FFDFC2';
                 } );
+
+              children
+                .select( '.connection' )
+                .transition()
+                .duration(scope.longTransitions)
+                .attr('x2', function(d){
+                  return x(d.nextrelx);
+                })
+                .attr('y2', function(d){
+                  return y(d.nextrely);
+                })
 
 
               children.exit().remove();
@@ -425,6 +439,8 @@ angular.module( 'cassiopeiaApp' )
 
 
             d3.selectAll( '.cassiopeia-tweet .connection' )
+            .transition()
+            .duration(scope.longTransitions)
             .attr( 'x2', function( d ){
                 return x( d.nextrelx );
             } )

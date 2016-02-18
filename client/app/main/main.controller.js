@@ -75,6 +75,20 @@ angular.module('cassiopeiaApp')
             $scope.loading = true;
         });
 
+        $scope.$watch('loading', function(loading){
+            if(!loading && $scope.autoPlay){
+                $timeout(function(){
+                    $scope.seekForward();
+                }, $scope.params.longTransitions * 2);
+            }
+        });
+
+        $scope.$watch('autoPlay', function(autoPlay){
+            if(autoPlay){
+                $scope.seekForward();
+            }
+        });
+
     };
 
 
@@ -133,6 +147,7 @@ angular.module('cassiopeiaApp')
     };
 
     var initVariables = function(){
+
 
         $scope.query = 'cop21';
         $scope.loading = true;
@@ -242,6 +257,8 @@ angular.module('cassiopeiaApp')
         var wanted = $scope.fromDate + $scope.activeTimeSpan/4;
         if(wanted <= $scope.absoluteEnd){
             $scope.getLocalData([wanted, wanted + $scope.activeTimeSpan]);
+        }else{
+            $scope.autoPlay = false;
         }
     }
 

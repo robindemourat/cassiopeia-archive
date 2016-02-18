@@ -34,10 +34,15 @@
     <div class="cartel-header">
       <span
         class="status-placeholder animate"
-        ng-class="{'loading' : loading
+        ng-click= "autoPlay = !autoPlay"
+        ng-class="{'loading' : loading,
+                    'glyphicon' : autoPlay || !loading,
+                    'glyphicon-play' : !autoPlay && !loading,
+                    'glyphicon-pause' : autoPlay,
+                    'live' : autoPlay
                   }"
       >
-        .
+
       </span>
       <span
         class="message animate"

@@ -247,7 +247,7 @@ Information pannel top-left
 .cartel-container
 {
     position: absolute;
-    z-index: -1;
+    /*z-index: -1;*/
     top: 2em;
     left: 2em;
 }
@@ -266,7 +266,8 @@ Information pannel top-left
     z-index: 3;
 
     pointer-events: none;
-    margin-left : 4em;
+    margin-left : 5em;
+    padding-top : .5em;
 }
 
 .zoom-controls-container{
@@ -395,34 +396,53 @@ Left pannel specific styles
 
     width: 3em;
     height: 3em;
+    cursor : pointer;
 
     color: transparent;
     border: 1px solid rgba(249, 223, 194, .4);
     border-radius: 50%;
     background: rgba(249, 223, 194, 0);
+    color: rgba(249, 223, 194, .4);
+    font-size : 1.3em;
+    padding : .9em 0 0 1em;
 }
 
-.cartel-container .status-placeholder.loading
+.cartel-container .status-placeholder.loading,
+.cartel-container .status-placeholder:hover
 {
     border: rgba(0,0,0,0);
     background: rgba(249, 223, 194, .4);
+    color : black;
+}
+
+.cartel-container .status-placeholder.glyphicon-play
+{
+    color : black;
 }
 
 .cartel-container .status-placeholder.live
 {
+    padding : .8em 0 0 .9em;
     border: 3px solid rgba(240,20,40,.5);
     background: rgba(249, 223, 194, 0);
+    color: rgba(240,20,40,.5);
 }
 
+.cartel-container .status-placeholder.live.loading
+{
+    background : rgba(240,20,40,.5);
+    color : black;
+}
 
 .cartel-container .message
 {
+    padding-top : .5em;
     font-size: 1.4em;
     font-weight: 400;
     font-style: italic;
     line-height: 2em;
 
-    margin-left: 3em;
+    margin-left: 3.5em;
 
     color: rgba(249, 223, 194, .4);
 }
@@ -451,6 +471,7 @@ Left pannel specific styles
 {
     display: flex;
 
+    margin-top : .5em;
     margin-bottom: .2em;
     margin-left: .4em;
 
@@ -553,7 +574,8 @@ Left pannel specific styles
 }
 
 .options-toggle:hover,
-.options-params-toggle:hover
+.options-params-toggle:hover,
+.timeline-mini-toggle:hover
 {
     background: rgba(249, 223, 194, .4);
     color : black;
