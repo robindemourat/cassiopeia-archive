@@ -7,7 +7,6 @@
 // Set default node environment to development
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-
 var express = require('express');
 var config = require('./config/environment');
 // Setup server
@@ -15,15 +14,12 @@ var app = express();
 var util = require('util');
 var fs = require('fs');
 // var oboe = require('oboe');
-// require('long-stack-traces');
 var dataHandler = require('./data-manager.js');
 
 //dependencies
 var server = require('http').createServer(app);
 
 // require('events').EventEmitter.prototype._maxListeners = 0;
-
-
 
 
 var request = require('request');
@@ -45,8 +41,6 @@ var sec = 1000,
 // var externalSourceUpdateDelay = 2 * hour;//30 * min;//delay from updating from external json
 var globalTimelineProfile  =[];//client-related global timeline
 var jsonData, lastHour;
-
-
 
 /*
   DATA PROCESSING FOR VIS

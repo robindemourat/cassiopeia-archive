@@ -536,7 +536,7 @@
   <div class="loading-contents">
     <h1>Cassiopeia</h1>
     <h2>#COP21, April-June 2015</h2>
-    <h3>Loading ...</h3>
+    <h3 ng-bind="(serverWorking)?'The server seems to be updating, retrying in 10 seconds':'Loading ...'">Loading ...</h3>
   </div>
 </div>
 <!-- end loading div -->

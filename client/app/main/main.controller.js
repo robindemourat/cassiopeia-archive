@@ -85,13 +85,21 @@ angular.module('cassiopeiaApp')
             .get('api/globaltimeline')
             .success(function(d){
                 if(d.timeslots){
+
+                    $scope.serverWorking = false;
                     $rootScope.$broadcast("globalDataUpdate", d);
                     $scope.absoluteBegin = d.begin_abs;
                     $scope.absoluteEnd = d.end_abs;
                     $timeout(function(){
                         $scope.dataAvailable = true;
                     });
+                }else{
+                    $scope.serverWorking = true;
+                    setTimeout(initFunctions, 10000);
                 }
+            })
+            .error(function(e){
+                console.error('error while loading : ', e);
             });
 
         var search = $location.search();

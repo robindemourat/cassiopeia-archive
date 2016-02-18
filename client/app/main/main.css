@@ -592,6 +592,7 @@ Left pannel specific styles
 
     margin : 2em 0 2em 0;
     float : left;
+    width : 100%;
 }
 .share-container span
 {
