@@ -24,6 +24,7 @@
       longtransitions = {{params.longTransitions}}
       vismode={{params.visMode}}
       resizetriggers='{{rightColumnVisible}} {{timelineMini}}'
+      loading="loading"
       externalinfo='{{rightColumnVisible}}'
     ></svg>
   </div><!-- END main visualisation container-->
@@ -365,7 +366,7 @@
                   <div class="img-container animate-fast"
                       ng-style="{'background' : getContrastYIQ(tweet.color)}"
                   >
-                    <img ng-if="finallyDisplayedTweets.length < 100" ng-src="{{tweet.profile_image_url}}" alt="">
+                    <!-- <img ng-if="finallyDisplayedTweets.length < 100" ng-src="{{tweet.profile_image_url}}" alt=""> -->
                   </div>
                   <div
                     class="names-container animate-fast"
