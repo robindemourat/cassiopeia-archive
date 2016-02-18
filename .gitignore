@@ -1,1 +1,5 @@
-/data/
+/archive_data/
+/dist/
+/e2e/
+/node_modules/
+/server/data/tweets-cop21.min.json

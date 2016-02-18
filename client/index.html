@@ -1,0 +1,122 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <base href="/" target="_blank">
+
+    <title>Cassiopeia - COP21</title>
+
+    <link rel="icon" type="image/png" href="favicon.png" />
+
+     <!-- META DUBLIN CORE -->
+    <meta name="DC.Title" lang="fr" content="Cassiopeia - COP21" />
+    <meta name="DC.Date.created" scheme="W3CDTF" content="2015-06-20" />
+     <!-- END META DUBLIN CORE -->
+
+    <meta name="author" content=""/>
+    <meta name="keywords" content="twitter, cop21, visualization"/>
+    <meta name="description" content="Live and old tweets visualization about COP 21 on twitter, per user" />
+    <meta name="viewport" content="user-scalable=no,width=device-width" />
+
+
+    <!-- META TWITTER -->
+    <meta name="twitter:card" value="summary">
+    <meta name="twitter:site" content="https://cassiopeia-cop21.herokuapp.com">
+    <meta name="twitter:title" content="Cassiopeia - COP21">
+    <meta name="twitter:description" content="Live and old tweets visualization about COP 21 on twitter, per user">
+    <!--<meta name="twitter:creator" content="@robindemourat">-->
+    <!-- todo : Twitter Summary card images must be at least 200x200px -->
+    <meta name="twitter:image" content="https://cassiopeia-cop21.herokuapp.com/twitter_img.jpg">
+    <!-- end meta twitter-->
+
+    <!-- META GOOGLE + -->
+    <meta itemprop="name" content="Cassiopeia - COP21">
+    <meta itemprop="description" content="Live and old tweets visualization about COP 21 on twitter, per user">
+    <meta itemprop="image" content="https://cassiopeia-cop21.herokuapp.com/intro_res/google_img.jpg">
+    <!-- END META GOOGLE + -->
+
+
+    <!-- META OPEN GRAPH / FACEBOOK -->
+    <meta property="og:title" content="Cassiopeia - COP21"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://cassiopeia-cop21.herokuapp.com/"/>
+    <meta property="og:description" content="Live and old tweets visualization about COP 21 on twitter, per user"/>
+    <meta property="og:image" content="https://cassiopeia-cop21.herokuapp.com/facebook_img.jpg"/>
+    <!-- END META OPEN GRAPH / FACEBOOK -->
+
+    <!-- build:css(client) app/vendor.css -->
+      <!-- bower:css -->
+      <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+      <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+      <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css({.tmp,client}) app/app.css -->
+      <!-- injector:css -->
+      <link rel="stylesheet" href="app/app.css">
+      <link rel="stylesheet" href="app/main/main.css">
+      <!-- endinjector -->
+    <!-- endbuild -->
+
+      <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+  </head>
+  <body ng-app="cassiopeiaApp">
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <div ng-view="" kill-pointer-events="transitionning || loading"></div>
+
+
+
+    <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.min.js"></script>
+    <![endif]-->
+    <!-- build:js({client,node_modules}) app/vendor.js -->
+      <!-- bower:js -->
+      <script src="bower_components/jquery/dist/jquery.js"></script>
+      <script src="bower_components/angular/angular.js"></script>
+      <script src="bower_components/angular-resource/angular-resource.js"></script>
+      <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+      <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+      <script src="bower_components/angular-route/angular-route.js"></script>
+      <script src="bower_components/angular-animate/angular-animate.js"></script>
+      <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+      <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+      <script src="bower_components/d3/d3.js"></script>
+      <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
+      <!-- endbower -->
+    <!-- endbuild -->
+
+        <!-- build:js({.tmp,client}) app/app.js -->
+        <script src="app/app.js"></script>
+          <!-- injector:js -->
+          <script src="app/DateUtils/DateUtils.service.js"></script>
+          <script src="app/cassiopeia/cassiopeia.directive.js"></script>
+          <script src="app/fitheight/fitheight.directive.js"></script>
+          <script src="app/main/main.controller.js"></script>
+          <script src="app/main/main.js"></script>
+          <script src="app/nova/nova.service.js"></script>
+          <script src="app/timeline/timeline.directive.js"></script>
+          <script src="components/navbar/navbar.controller.js"></script>
+          <!-- endinjector -->
+        <!-- endbuild -->
+
+
+        <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-73901179-1', 'auto');
+        ga('send', 'pageview');
+
+      </script>
+</body>
+</html>

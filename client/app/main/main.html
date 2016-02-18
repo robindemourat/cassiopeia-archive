@@ -1,0 +1,464 @@
+
+
+<!-- column column-left : contains vis + timelines -->
+<div
+  class="col-left animate"
+  ng-class="{'col-xs-6 col-sm-9' : rightColumnVisible, 'col-xs-12':!rightColumnVisible}"
+  ng-init="rightColumnVisible = true"
+  ng-init="timelineMini = false"
+>
+  <!-- cassiopeia-container : main visualisation container-->
+  <div
+    class="cassiopeia-container animate"
+    ng-class="{
+      'expanded' : timelineMini
+    }"
+  >
+    <svg
+      class="cassiopeia-vis"
+      id="cassiopeia-vis"
+
+      cassiopeia
+      shorttransitions = {{params.shortTransitions}}
+      mediumtransitions = {{params.mediumTransitions}}
+      longtransitions = {{params.longTransitions}}
+      vismode={{params.visMode}}
+      resizetriggers='{{rightColumnVisible}} {{timelineMini}}'
+      externalinfo='{{rightColumnVisible}}'
+    ></svg>
+  </div><!-- END main visualisation container-->
+
+  <!-- cartel-container : containing general information -->
+  <div class="cartel-container">
+    <div class="cartel-header">
+      <span
+        class="status-placeholder animate"
+        ng-class="{'loading' : loading
+                  }"
+      >
+        .
+      </span>
+      <span
+        class="message animate"
+        ng-show="query && displayedBegin && displayedEnd"
+      >
+        Tweet users for <a class="query" ng-href="https://twitter.com/search?q={{query}}" target="_blank">#{{query}}</a>, from <span ng-bind="displayedBegin"></span>, to <span ng-class="{'live':live == true}" ng-bind="displayedEnd" class="animate"></span>
+      </span>
+    </div>
+
+    <div class="cartel-colors">
+      <div
+        class="cartel-colors-item animate"
+        ng-repeat="color in colors track by $index"
+      >
+        <span
+          class="color-rect"
+          ng-style="{'background' : color.color}"
+        ></span>
+        <span class="color-expression" ng-bind="color.name"></span>
+      </div>
+    </div>
+
+  </div><!-- END cartel-container : containing general information -->
+
+  <!-- timeline-container : interactive and global timeline container -->
+  <div
+    class="timeline-container animate animate"
+    ng-class="{'mini-timeline':timelineMini}"
+  >
+    <!-- local-timeline-container -->
+    <div
+      class="local-timeline-container animate"
+    >
+    <!--local-timeline-holder : actual holder of the visualisation for timeline one -->
+      <svg
+        class="local-timeline-holder timeline"
+        id="local-timeline"
+
+        dataevt="localDataUpdate"
+        dataproperty="timeline"
+        brushoutputevt="newtimespan"
+        shorttransitions = {{params.shortTransitions}}
+        mediumtransitions = {{params.mediumTransitions}}
+        longtransitions = {{params.longTransitions}}
+      >
+
+      </svg><!--END : local-timeline-holder : actual holder of the visualisation for timeline one -->
+
+    </div><!-- END local-timeline-container -->
+
+    <!-- timeline-mini-toggle -->
+    <div
+      class="timeline-mini-toggle"
+      ng-click="timelineMini = !timelineMini"
+    >
+      ...
+    </div><!-- END timeline-mini-toggle -->
+
+    <!-- global-timeline-container -->
+    <div
+      class="global-timeline-container animate"
+      ng-show="!timelineMini"
+    >
+      <!--global-timeline-holder : actual holder of the visualisation for timeline two -->
+      <svg
+        class="global-timeline-holder timeline"
+        dataevt="globalDataUpdate"
+        brushoutputevt="newtimespan"
+        brushinputevt="localDataUpdate"
+        shorttransitions = {{params.shortTransitions}}
+        mediumtransitions = {{params.mediumTransitions}}
+        longtransitions = {{params.longTransitions}}
+
+        id="global-timeline"
+      >
+
+      </svg><!--END : global-timeline-holder : actual holder of the visualisation for timeline two -->
+    </div><!-- END global-timeline-container -->
+  </div><!-- END timeline-container : interactive and global timeline container -->
+
+
+
+</div><!-- END column column-left : contains vis + timelines -->
+
+<!-- column column-right : contains option pannel -->
+<div
+  class="col-right animate"
+  ng-class="{'col-xs-6 col-sm-3' : rightColumnVisible}"
+>
+
+  <!-- options-toggle toggles options visibility-->
+  <div
+    class="options-toggle animate"
+    ng-click="rightColumnVisible = !rightColumnVisible"
+  >
+  <span class="options-toggle-val">
+    .<br>.<br>.
+  </span>
+  </div><!-- END options-toggle toggles options visibility-->
+
+  <!-- options-pannel : additive informations container -->
+  <div
+    class="options-pannel animate animate-width"
+    ng-show="rightColumnVisible"
+  >
+    <!-- options-items-container : all but toggle -->
+    <div class="options-items-container">
+      <!-- options-params-container : specific params / modes of vis -->
+      <div
+        class="options-params-container animate"
+      >
+        <!-- options-params-contents : all options -->
+        <div
+          class="options-params-contents animate animate-height"
+          ng-init="optionsVisible = false"
+          ng-show="optionsVisible"
+        >
+          <!-- about-content : contents for about -->
+          <div
+            class="about-content animate animate-height"
+            ng-init="about = false"
+            ng-show="about"
+          >
+            <div class="about-content-header">
+              <h4><span>About Cassiopeia</span>
+              <span
+                class="glyphicon glyphicon-remove"
+                ng-click="about=false;optionsVisible = false"
+              ></span></h4>
+            </div>
+            <div class="about-content-body">
+              <div>Cassiopeia aims at visualizing and navigating into a twitter feed related to a specific query, and to follow the activity of the twitter accounts involved in the conversation, each represented by a constellation of visual objects. You can navigate into the twitter feed's history by brushing the histograms presented below the main visualization. Specific tweets analysis are allowed by the possibility to color tweets and users related to specific keywords or regular expressions.<br><br></div>
+              <div>It has been developed by <a href="https://twitter.com/robindemourat">Robin de Mourat</a> and <a href="https://twitter.com/optichiasm">Donato Ricci</a>, with the essential help of <a href="http://www.medialab.sciences-po.fr/fr/people/benjamin-ooghe-tabanou/">Benjamin Ooghe-Tabanou</a>, at <a href="http://dhmonade.net/">MONADE Rennes 2</a> and <a href="http://www.medialab.sciences-po.fr/fr/">médialab Sciences Po</a>. Cassiopeia is the little sister of a former experiment named <a href="http://www.densitydesign.org/research/andromeda-twitterwall/">Andromeda</a> and made with <a href="http://www.densitydesign.org/person/michele-mauri/">Michele Mauri</a> and <a href="https://www.behance.net/valeriopellegrini">Valerio Pellegrini</a>.</div>
+            </div>
+          </div><!-- END about-content : contents for about -->
+
+
+          <!-- options-about-toggle : button for  about infos display toggle -->
+          <div
+            class="options-about-toggle cassiopeia-button animate-fast"
+            ng-click="about = !about"
+          >
+            About
+          </div><!-- END options-about-toggle : button for  about infos display toggle -->
+
+          <!-- colors-filter-container -->
+          <div class="colors-filter-container">
+            <p class="options-indication">
+              Users colors regarding their tweets
+            </p>
+
+            <!-- add-color repeat - list of colors -->
+            <div
+              class="add-color"
+              ng-repeat="color in colors track by $index"
+            >
+              <div
+                class="glyphicon glyphicon-remove-sign"
+                ng-click="removeColor($index)"
+              ></div>
+              <div
+                class="animate-fast color-text"
+              >
+                <span>
+                  tweets that contain/belong to
+                </span>
+                <span
+                  ng-bind="color.expressions.join(', ')"
+                  class="query"
+                >
+                </span>
+                <span
+                >
+                are filled with
+                </span>
+
+              </div>
+              <div
+                  class="animate-fast color"
+                  ng-bind="color.color"
+                  ng-style="{'background':color.color}"
+                ></div>
+
+            </div><!-- END add-color repeat - list of colors -->
+
+
+            <!-- add-color : button for adding colors filters -->
+            <div class="add-color"
+              ng-click="editingColor = true"
+              ng-show="!editingColor"
+            >
+              <span class="glyphicon glyphicon-plus-sign"></span>
+              <span class="animate-fast add-text">Add a color filter</span>
+            </div><!-- END add-color : button for adding colors filters -->
+
+          </div><!-- END colors-filter-container -->
+
+          <!-- color edition for editing a new color-->
+          <form
+            class="add-color"
+            ng-show="editingColor"
+            ng-submit="addColor(tempColorExpression, tempColorName)"
+          >
+            <span
+              class="glyphicon glyphicon-remove-sign"
+              ng-click="editingColor = false"
+            ></span>
+            <span>
+              <input type="text" placeholder="type an expression"
+              ng-model="tempColorExpression"
+              >
+            </span>
+            <span>
+              <input
+                type="text"
+                placeholder="type a color name"
+                ng-model="tempColorName"
+              >
+            </span>
+            <span
+              class="glyphicon glyphicon-plus-sign"
+              ng-click="addColor(tempColorExpression, tempColorName)"
+            ></span>
+          </form><!-- END color edition for editing a new color-->
+
+          <!-- add-button-from-file : trigger for color .csv file connection -->
+          <div
+            class="add-button-from-file cassiopeia-button"
+            ngf-select
+            ngf-change="uploadcolorfile($files)"
+            ngf-multiple="false"
+          >Add a color file (2 columns' csv)</div>
+          <!-- END add-button-from-file : trigger for color .csv file connection -->
+
+          <!-- nb-tweets-container -->
+          <!--<div class="nb-tweets-container">
+            <p class="options-indication">
+              Filter users by tweet
+            </p>
+
+            <div class="nb-tweets-filter">
+              <span class="from">1</span>
+              <span class="slider"></span>
+              <span class="to">10</span>
+            </div>
+          </div>--><!-- END nb-tweets-container -->
+
+        </div><!-- END options-params-contents : all options -->
+        </div><!-- END options-params-container : specific params / modes of vis -->
+
+        <!-- options-params-toggle : toggle visibility of params -->
+        <div
+          class="options-params-toggle animate"
+          ng-click="optionsVisible = !optionsVisible"
+        >
+          ...
+        </div>
+        <!-- END options-params-toggle : toggle visibility of params -->
+
+        <!-- options-main-container : main wrapper for items display and filter-->
+        <div class="options-main-container">
+          <!-- options-filter-container : header containing search and filter -->
+          <div class="options-filter-container">
+            <!--options-search-container : contains the search interface-->
+            <form
+              class="options-search-container"
+              ng-submit="addTermFilter()"
+            >
+              <span class="icon glyphicon glyphicon-search"></span>
+              <span class="input-container">
+                <input
+                  class="animate-fast"
+                  type="text"
+                  placeholder="Search in tweets"
+                  ng-model="tempFilterValue"
+                >
+              </span>
+
+              <span
+                class="add-search-filter glyphicon glyphicon-plus-sign animate"
+                ng-show="tempFilterValue.length > 0"
+                ng-click="addTermFilter()"
+              >
+              </span>
+            </form>
+            <!--END options-search-container : contains the search interface-->
+
+            <!--options-active-filter : repetition of active filters -->
+            <div class="options-active-filter animate animate-height"
+              ng-repeat="filter in filters track by $index"
+            >
+              <div class="message"
+                    ng-bind="filter.message"
+              >
+              </div>
+              <div class="value"
+                    ng-bind="filter.value"
+              >
+              </div>
+              <div class="close-container"
+                  ng-click="removeFilter($index)"
+              >
+                <span class="glyphicon glyphicon-remove-sign"></span>
+              </div>
+            </div>
+            <!--END options-active-filter : repetition of active filters -->
+
+          </div><!-- END options-filter-container : header containing search and filter -->
+
+
+          <!-- options-tweets-list-wrapper : fixedcontaining element for items list-->
+          <div class="options-tweets-list-wrapper fitheight">
+            <!-- options-tweets-list-container : scrollable containing element for items list -->
+            <div class="options-tweets-list-container fitheight">
+              <!-- tweet-item : containing element for tweet information -->
+              <div class="tweet-item animate"
+                    ng-repeat="tweet in finallyDisplayedTweets =(displayedTweets | filter : {text : tempFilterValue}) track by $index"
+                    ng-mouseenter="overTweet(tweet)"
+                    ng-mouseleave="outTweet(tweet)"
+                    ng-style="{'background':tweet.color,
+                                'color' : getContrastYIQ(tweet.color)}"
+              >
+                <div class="top-cartel animate-fast"
+                  ng-style="{'border-bottom' : '1px solid '+getContrastYIQ(tweet.color)}"
+                >
+                  <div class="img-container animate-fast"
+                      ng-style="{'background' : getContrastYIQ(tweet.color)}"
+                  >
+                    <!--<img ng-src="{{tweet.profile_image_url}}" alt="">-->
+                  </div>
+                  <div
+                    class="names-container animate-fast"
+                    ng-click="addUserFilter(tweet)"
+                  >
+                    <h4 class="username">
+                      <span ng-bind="tweet.user_name"></span>
+                      <a ng-href="https://twitter.com/{{tweet.user_screen_name}}" class="glyphicon glyphicon-share-alt" style="position : absolute;right:1em;top:1em"></a>
+                    </h4>
+
+                    <h4 class="screenname">{{tweet.user_screen_name}}</h4>
+                  </div>
+                </div>
+                <div class="middle-cartel">
+                  <p ng-bind="tweet.text"></p>
+                </div>
+                <div
+                  class="bottom-cartel"
+                  ng-style="{'border-top' : '1px solid '+getContrastYIQ(tweet.color)}"
+                >
+                  <p ng-bind="tweetDateFormat(tweet.created_at_abs)"></p>
+                </div>
+
+              </div><!-- END tweet-item : containing element for tweet information -->
+
+              <div
+                class="tweet-item animate"
+                ng-show="finallyDisplayedTweets.length == 0"
+              > No tweets matching</div>
+
+              <!-- show more button -->
+              <div
+                class="cassiopeia-button show-more animate"
+                ng-show="displayedTweets.length < filteredTweets.length && !onUserInteraction"
+                ng-click="showMore()"
+              >
+                Show more
+              </div><!-- END show more button -->
+            </div><!-- END options-tweets-list-container : scrollable containing element for items list -->
+          </div>
+          <!-- END options-tweets-list-wrapper : fixed containing element for items list-->
+        </div>
+        <!-- END options-main-container : main wrapper for items display and filter-->
+        <!-- options-about-contents : full height about infos -->
+    </div>
+    <!-- END options-items-container : all but toggle -->
+  </div><!-- END options-pannel : additive informations container -->
+</div><!-- END column column-right : contains option pannel -->
+
+<!--tooltips-->
+  <div class="tooltip tooltip-1">
+    Tooltip 1
+  </div>
+  <div class="tooltip tooltip-2">
+    Tooltip 2
+  </div>
+
+  <div class="tooltip tweet-tooltip tweet-item">
+                <div class="top-cartel animate-fast"
+                >
+                  <div class="img-container animate-fast"
+                  >
+                  </div>
+                  <div
+                    class="names-container animate-fast"
+                  >
+                    <h4 class="username">UserName</h4>
+
+                    <h4 class="screenname">ScreenName</h4>
+                  </div>
+                </div>
+                <div class="middle-cartel">
+                  <p class="tweet-text">Text of tweet</p>
+                </div>
+               <!-- <div
+                  class="bottom-cartel"
+                >
+                  <p class="tweet-date">Date of tweet</p>
+                </div>-->
+
+</div><!-- END tweet-tooltip : containing element for tweet information -->
+
+
+
+<!-- loading div -->
+<div
+  class="loading-container animate"
+  ng-if="!dataAvailable"
+>
+  <div class="loading-contents">
+    <h1>Cassiopeia</h1>
+    <h2>#COP21, April-June 2015</h2>
+    <h3>Loading ...</h3>
+  </div>
+</div>
+<!-- end loading div -->

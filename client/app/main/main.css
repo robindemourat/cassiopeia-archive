@@ -1,0 +1,1203 @@
+/*
+
+STYLE GUIDELINES :
+
+Fonts : Gotham;
+
+COLORS :
+Shape shadow  : rgba(0,0,0,14);
+Shape : rgb(249, 223, 194);#FFDFC2;
+Error msg : rgba(255, 255, 255, 100);
+
+*/
+
+/*
+GLOBAL STYLES
+*/
+
+input
+{
+    width: 100%;
+
+    border: none;
+    outline: none;
+    background: inherit;
+}
+
+a,
+a:hover,
+a:visited,
+a:active,
+a:link
+{
+    text-decoration: none;
+
+    color: inherit;
+}
+
+::-webkit-input-placeholder
+{
+    font-style: italic;
+
+    color: rgba(249,223,194,.4);
+}
+::-moz-placeholder
+{
+    font-style: italic;
+
+    color: rgba(249,223,194,.4);
+} /* firefox 19+ */
+:-ms-input-placeholder
+{
+    font-style: italic;
+
+    color: rgba(249,223,194,.4);
+} /* ie */
+input:-moz-placeholder
+{
+    font-style: italic;
+
+    color: rgba(249,223,194,.4);
+}
+
+
+::-webkit-scrollbar
+{
+    width: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track
+{
+    border-top: 1px solid #ffdfc2;
+    border-bottom: 1px solid #ffdfc2;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb
+{
+    cursor: pointer;
+
+    background: #ffdfc2;
+}
+::-webkit-scrollbar-thumb:window-inactive
+{
+    background: #ffdfc2;
+}
+
+/*
+GENERIC CLASSES
+*/
+
+.dont-touch
+{
+   pointer-events : none;
+   opacity : .2;
+}
+
+.cassiopeia-button
+{
+    padding: .5em;
+
+    cursor: pointer;
+    text-align: center;
+    text-transform: uppercase;
+
+    background: rgba(249, 223, 194, .15);
+}
+
+.cassiopeia-button:hover
+{
+    background: rgba(249, 223, 194, .5);
+}
+
+/*
+PRIMARY LAYOUT
+*/
+
+body
+{
+    font-family: 'Montserrat', sans-serif;
+
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+
+    color: #ffdfc2;
+    background: black;
+
+    -webkit-touch-callout: none;
+    -khtml-user-select: none;
+}
+
+::selection
+{
+    color: black;
+    background: #ffdfc2;
+}
+
+::-moz-selection
+{
+    color: black;
+    background: #ffdfc2;
+}
+
+.global-container
+{
+    position: absolute;
+
+    overflow: hidden;
+
+    width: 100%;
+    height: 100%;
+}
+
+.col-left,
+.col-right
+{
+    position: absolute;
+
+    height: 100%;
+    padding: 0;
+}
+
+.col-left
+{
+    left: 0;
+}
+
+.col-right
+{
+    right: 0;
+}
+
+.cassiopeia-container
+{
+    width: 100%;
+    height: 60%;
+    padding: 2em 1em 2em 2em;
+}
+
+.cassiopeia-container.expanded
+{
+    height: 80%;
+}
+
+.timeline-container
+{
+    position: absolute;
+    bottom: 0;
+
+    width: 100%;
+    height: 40%;
+    padding-right : 1em;
+}
+
+.timeline-container.mini-timeline
+{
+    height: 20%;
+}
+
+.loading-container
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    color: #ffdfc2;
+    background: black;
+}
+
+.loading-container .loading-contents
+{
+    position: relative;
+    top: 50%;
+
+    transform: translateY(-50%);
+    text-align: center;
+
+    text-transform : uppercase;
+}
+
+/*
+SECONDARY LAYOUT
+*/
+
+/*
+Information pannel top-left
+*/
+.cartel-container
+{
+    position: absolute;
+    z-index: -1;
+    top: 2em;
+    left: 2em;
+}
+
+
+
+.cartel-container .cartel-header
+{
+    display: flex;
+
+    margin-bottom: 1em;
+}
+
+.cartel-container .cartel-colors
+{
+    z-index: 3;
+
+    pointer-events: none;
+}
+
+/*
+    Options pannel layout
+*/
+
+.options-pannel
+{
+    overflow: hidden;
+
+    height: 100%;
+    margin: 0 1em 0 1em;
+}
+
+.options-main-container
+{
+    height: 100%;
+}
+
+.options-pannel .options-params-container
+{
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    max-height: 300px;
+}
+
+.options-tweets-list-wrapper
+{
+    overflow: hidden;
+}
+
+.options-tweets-list-container
+{
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    padding-right: 1em;
+    padding-bottom: 2em;
+}
+
+/*
+    Timelines secondary layout
+*/
+.local-timeline-container,
+.timeline-mini-toggle,
+.global-timeline-container
+{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.local-timeline-container,
+.global-timeline-container
+{
+    padding: 0 0em 1em 2em;
+}
+
+.local-timeline-container
+{
+    height: 50%;
+}
+
+.mini-timeline .local-timeline-container
+{
+    width: 100%;
+    height: 90%;
+}
+
+.timeline-mini-toggle
+{
+    line-height: .3em;
+
+    height: 1em;
+
+    cursor: pointer;
+    text-align: center;
+
+    border-top: 1px solid rgba(249, 223, 194, .4);
+}
+
+.global-timeline-container
+{
+    width: 100%;
+    height: 45%;
+}
+
+.timeline
+{
+    width: 100%;
+    height: 100%;
+}
+
+
+/*
+    PARTS SPECIFIC STYLES
+*/
+
+/*
+Left pannel specific styles
+*/
+
+.cartel-container .status-placeholder
+{
+    position: absolute;
+
+    width: 3em;
+    height: 3em;
+
+    color: transparent;
+    border: 1px solid rgba(249, 223, 194, .4);
+    border-radius: 50%;
+    background: rgba(249, 223, 194, 0);
+}
+
+.cartel-container .status-placeholder.loading
+{
+    border: rgba(0,0,0,0);
+    background: rgba(249, 223, 194, .4);
+}
+
+.cartel-container .status-placeholder.live
+{
+    border: 3px solid rgba(240,20,40,.5);
+    background: rgba(249, 223, 194, 0);
+}
+
+
+.cartel-container .message
+{
+    font-size: 1.4em;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 2em;
+
+    margin-left: 3em;
+
+    color: rgba(249, 223, 194, .4);
+}
+
+.cartel-container .query
+{
+    font-weight: 700;
+    font-style: normal;
+
+    padding-left: .5em;
+
+    color: #ffdfc2;
+}
+
+.cartel-container .message .live
+{
+    margin-left: .2em;
+    padding: .2em .6em .3em .5em;
+
+    color: #ffdfc2;
+    border-radius: 1em;
+    background: rgba(240,20,40,.5);
+}
+
+.cartel-container .cartel-colors-item
+{
+    display: flex;
+
+    margin-bottom: .2em;
+    margin-left: .4em;
+
+    opacity: .5;
+}
+
+.cartel-container .cartel-colors-item:hover
+{
+    opacity: 1;
+}
+
+.cartel-container .cartel-colors-item.ng-enter
+{
+    max-height: 0;
+}
+
+.cartel-container .cartel-colors-item.ng-enter-active
+{
+    max-height: 50px;
+}
+
+.cartel-container .cartel-colors-item.ng-leave
+{
+    max-height: 50px;
+}
+
+.cartel-container .cartel-colors-item.ng-leav-active
+{
+    max-height: 0;
+}
+
+
+
+.cartel-container .cartel-colors-item .color-rect
+{
+    width: 1em;
+    height: 1em;
+    margin-right: .5em;
+}
+.cartel-container .cartel-colors-item .color-expression
+{
+    font-size: .9em;
+    font-style: italic;
+    line-height: 1.1em;
+}
+
+
+/* Right pannel specific styles */
+
+.options-toggle
+{
+    line-height: .5em;
+
+    position: absolute;
+    left: -1em;
+
+    width: 1em;
+    height: 100%;
+    padding-left: .2em;
+
+    cursor: pointer;
+
+    border-left: 1px solid rgba(249, 223, 194, .4);
+    background: black;
+}
+
+.options-toggle-val
+{
+    position: absolute;
+    top: 50%;
+}
+
+.options-params-toggle
+{
+    line-height: .5em;
+
+    height: 1em;
+
+    cursor: pointer;
+    text-align: center;
+
+    border-bottom: 1px solid rgba(249, 223, 194, .4);
+}
+
+.options-pannel .options-indication
+{
+    font-style: italic;
+
+    margin: 1em 0 .5em 0;
+
+    color: rgba(249, 233, 194, .4);
+}
+
+.about-content-header h4
+{
+    display: flex;
+
+    width: 100%;
+    margin-bottom: 2em;
+
+    text-transform: uppercase;
+}
+.about-content-header span:last-child
+{
+    cursor: pointer;
+    text-align: right;
+}
+
+.options-params-contents
+{
+    padding-top: 2em;
+    padding-right : 1em;
+}
+
+.options-params-contents div:last-child
+{
+    margin-bottom: 1em;
+}
+
+.options-pannel .add-color
+{
+    display: flex;
+
+    margin-bottom: 1em;
+
+    cursor: pointer;
+    text-align: left;
+
+    opacity: .8;
+}
+
+.add-color:last-of-type
+{
+    border-top : 2px solid rgba(249, 223, 194, .4);
+    border-bottom : 2px solid rgba(249, 223, 194, .4);
+    padding : 1em 0 1em 0;
+}
+
+.add-color:last-of-type:hover .add-text
+{
+    padding-left : 20%;
+}
+
+.options-pannel .add-color>span{
+    float : left;
+}
+
+.options-pannel .add-color .glyphicon
+{
+    min-width: 1em;
+    width : 2em;
+}
+
+.options-pannel .add-color .color-text
+{
+    flex-grow: 5;
+}
+
+.options-pannel .add-color .query
+{
+    font-weight: 700;
+    font-style: italic;
+
+    text-align: left;
+}
+
+.options-pannel .add-color .color
+{
+    padding: .2em;
+    width : 5em;
+}
+
+.options-pannel .add-color .add-text
+{
+    text-align: left;
+
+    flex-grow: 5;
+}
+
+.options-pannel .add-color:hover
+{
+    opacity: 1;
+}
+
+.options-pannel .nb-tweets-filter
+{
+    display: flex;
+
+    width: 100%;
+}
+
+.options-pannel span
+{
+    flex-grow: 1;
+}
+
+.options-pannel .nb-tweets-filter .slider
+{
+    width: 50%;
+    margin-top: .7em;
+
+    border-top: 1px solid #ffdfc2;
+
+    flex-grow: 5;
+}
+
+.options-filter-container
+{
+    margin-bottom: 1.5em;
+}
+
+.options-search-container
+{
+    font-size: 1.6em;
+
+    display: flex;
+
+    width: 100%;
+    padding-top: .5em;
+    padding-bottom: .5em;
+
+    border-bottom: 1px solid rgba(249, 233, 194, .4);
+}
+
+.options-search-container .icon
+{
+    border-right: 1px solid rgb(249,233,194);
+
+    flex-grow: 1;
+}
+
+.options-search-container .glyphicon
+{
+    line-height: 1.3em;
+
+    min-width: 2em;
+}
+
+.options-search-container .input-container
+{
+    padding-left: 1em;
+
+    flex-grow: 5;
+}
+
+.options-search-container input:focus
+{
+    padding-left: .5em;
+}
+
+.options-search-container .add-search-filter
+{
+    cursor: pointer;
+
+    opacity: .8;
+}
+
+.options-search-container .add-search-filter:hover
+{
+    opacity: 1;
+}
+
+.options-filter-container .options-active-filter
+{
+    display: flex;
+
+    width: 100%;
+    margin-top: .5em;
+    margin-bottom: .5em;
+}
+
+.options-filter-container .options-active-filter .message
+{
+    font-size: .8em;
+    font-style: italic;
+
+    max-width: 40%;
+    padding-right: 1em;
+
+    opacity: .4;
+    border-right: 1px solid rgba(249,233,194, .4);
+}
+
+.options-filter-container .options-active-filter .value
+{
+    padding-left: 1em;
+
+    flex-grow: 5;
+}
+
+.options-filter-container .options-active-filter .close-container
+{
+    min-width: 2em;
+
+    cursor: pointer;
+
+    opacity: .6;
+}
+
+.options-filter-container .options-active-filter .close-container:hover
+{
+    opacity: 1;
+}
+
+
+
+.options-filter-container .options-active-filter div:last-child
+{
+    text-align: right;
+}
+
+
+
+.options-filter-container .glyphicon
+{
+    min-width: 2em;
+}
+
+/* Tweets display */
+
+.tweet-item
+{
+    margin-bottom: 1em;
+    padding: .5em;
+
+    -webkit-user-select: all;
+       -moz-user-select: all;
+        -ms-user-select: all;
+            user-select: all;
+
+    background: rgba(249, 233, 194, .15);
+
+    -webkit-touch-callout: all;
+    -khtml-user-select: all;
+    position : relative;
+}
+
+.tweet-item:hover
+{
+    background: rgba(249, 233, 194, .25);
+}
+
+
+.tweet-item.ng-enter
+{
+    /*max-height : 0;*/
+    opacity: 0;
+}
+
+
+.tweet-item.ng-enter-active
+{
+    /*max-height : 200px;*/
+    opacity: 1;
+}
+
+.tweet-item.ng-leave
+{
+    max-height: 200px;
+
+    opacity: 1;
+}
+
+.tweet-item.ng-leave-active
+{
+    max-height: 0;
+
+    opacity: 0;
+}
+
+.tweet-item .top-cartel,
+.tweet-item .bottom-cartel
+{
+    display: flex;
+}
+
+.tweet-item .top-cartel
+{
+    padding-bottom: .5em;
+
+    cursor: pointer;
+
+    border-bottom: 1px solid rgba(249,233,194, .4);
+}
+.tweet-item .middle-cartel
+{
+    font-weight: 400;
+
+    overflow: hidden;
+
+    width: 100%;
+    padding: .5em 0 .5em 0;
+}
+.tweet-item .bottom-cartel
+{
+    font-size: .8em;
+
+    display: flex;
+
+    width: 100%;
+    padding-top: .5em;
+
+    border-top: 1px solid rgba(249,233,194, .4);
+}
+
+.tweet-item .top-cartel div
+{
+    margin-right: .5em;
+}
+
+.tweet-item .img-container
+{
+    width: 2em;
+    height: 2em;
+
+    background: #ffdfc2;
+}
+
+.tweet-item .img-container img
+{
+    width: 100%;
+    height: 100%;
+
+    opacity: .5;
+
+    -webkit-filter: sepia(1);
+            filter: sepia(1);
+}
+
+.tweet-item .top-cartel h4
+{
+    margin: 0;
+}
+
+.tweet-item .top-cartel .names-container
+{
+    padding-top: .5em;
+}
+
+.tweet-item  .top-cartel .username
+{
+    font-size: .8em;
+
+    margin-bottom: .2em;
+
+    text-transform: uppercase;
+}
+
+.tweet-item  .top-cartel .screenname
+{
+    font-size: .6em;
+    font-style: italic;
+}
+
+.tweet-item .top-cartel:hover
+{
+    background: rgba(249,233,194, .2);
+}
+
+.tweet-item .top-cartel:hover .img-container
+{
+    width: 4em;
+    height: 4em;
+}
+
+
+.tweet-item .top-cartel:hover .username
+{
+    font-size: 1.2em;
+}
+
+.tweet-item  .top-cartel:hover .screenname
+{
+    font-size: .9em;
+}
+
+
+.tweet-item .bottom-cartel p:last-child
+{
+    width: 50%;
+
+    text-align: right;
+
+    flex-grow: 5;
+}
+
+/* tooltip */
+
+.tooltip-1,
+.tooltip-2,
+{
+    position: fixed;
+    z-index: -1;
+
+    width: 10%;
+    padding: .5em;
+
+    text-align: center;
+
+    background: rgba(0,0,0,.8);
+}
+
+.tweet-tooltip
+{
+    position: fixed;
+    z-index: -1;
+    top: 2em;
+    right: 2em;
+
+    width: 20%;
+}
+
+
+/*cassiopeia SVG STYLES */
+
+.cassiopeia-vis
+{
+    width: 100%;
+    height: 100%;
+}
+
+.cassiopeia-user
+{
+    cursor: pointer;
+
+    opacity: .8;
+}
+
+.cassiopeia-user:hover
+{
+    opacity: 1;
+}
+
+.cassiopeia-user .shape
+{
+    fill: rgb(249, 223, 194);
+}
+
+.cassiopeia-user .subshape
+{
+    fill: none;
+}
+
+.cassiopeia-user .stroke
+{
+    stroke-width: .01;
+    fill: transparent;
+}
+
+.cassiopeia-user .cassiopeia-tweet .mini-shape
+{
+    fill: rgb(249, 223, 194);
+}
+
+.cassiopeia-user .cassiopeia-tweet .connection
+{
+    z-index: 0;
+
+    stroke: rgb(249, 223, 194);
+    stroke-width: .8;
+    stroke-opacity: .3;
+}
+
+/* TIMELINES */
+
+.barsContainer
+{
+    z-index: 1;
+}
+.ticksContainer
+{
+    z-index: 3;
+}
+
+.timeline-cache
+{
+    z-index: 2;
+
+    fill: black;
+}
+
+.bar
+{
+    -webkit-transition: all .1s ease;
+       -moz-transition: all .1s ease;
+        -ms-transition: all .1s ease;
+         -o-transition: all .1s ease;
+
+    opacity: .7;
+
+    fill: rgb(249, 223, 194);
+    cursor : pointer;
+}
+
+.bar:hover
+{
+    opacity: 1;
+}
+
+
+
+.tick
+{
+    font-size: .7em;
+
+    stroke: #ffdfc2;
+    fill: #ffdfc2;
+}
+
+
+
+.tick text
+{
+    text-anchor: start!important;
+}
+
+/* brush hacks */
+.brush .background
+{
+    width: 100%;
+}
+
+.local-timeline-holder .background
+{
+    fill : white;
+    opacity : 0.01;
+    visibility : visible!important;
+}
+
+.local-timeline-holder:hover .background
+{
+    opacity : .05;
+}
+
+.brush .extent.limit
+{
+    fill : brown;
+    opacity : .2;
+    stroke-width : 0;
+}
+
+
+.resize.nw,
+.resize.ne,
+.resize.se,
+.resize.sw,
+.resize.n,
+.resize.s
+{
+    display: none;
+}
+
+.resize.e,
+.resize.w
+{
+    /*width : 1em;*/
+    /*display : block;*/
+}
+
+.brush .extent
+{
+    stroke: #fff;
+    fill-opacity: .5;
+    fill: #ffdfc2;
+    shape-rendering: crispEdges;
+}
+
+
+/*
+    TRANSITION LIBRARY
+*/
+
+.animate
+{
+    -webkit-transition: all .5s ease;
+       -moz-transition: all .5s ease;
+        -ms-transition: all .5s ease;
+         -o-transition: all .5s ease;
+}
+
+.animate-fast
+{
+    -webkit-transition: all .1s ease;
+       -moz-transition: all .1s ease;
+        -ms-transition: all .1s ease;
+         -o-transition: all .1s ease;
+}
+
+.animate.ng-show,
+.animate-fast.ng-show,
+.animate.ng-enter,
+.animate-fast.ng-enter
+{
+    opacity: 1;
+}
+
+.animate.ng-hide,
+.animate-fast.ng-hide,
+.animate.ng-leave,
+.animate-fast.ng-leave
+{
+    opacity: 0;
+}
+
+/*
+ANIMATE-HEIGHT
+*/
+.animate-height.ng-hide-add,
+.animate-height.ng-hide-remove
+{
+    overflow-y: hidden;
+
+    max-height: 0;
+}
+
+.animate-height.ng-hide-remove.ng-hide-remove-active
+{
+    overflow-y: hidden;
+
+    max-height: 900px;
+}
+.animate-height.ng-hide-add
+{
+    overflow-y: hidden;
+
+    max-height: 900px;
+}
+.animate-height.ng-hide-add.ng-hide-add-active
+{
+    overflow-y: hidden;
+
+    max-height: 0;
+}
+
+
+.animate-height.ng-enter,
+{
+    max-height: 0;
+}
+
+.animate-height.ng-enter.ng-enter-active,
+{
+    max-height: 999px;
+}
+
+.animate-height.ng-leave,
+{
+    max-height: 999px;
+}
+
+.animate-height.ng-leave.ng-leave-active,
+{
+    max-height: 0;
+}
+
+/*
+ANIMATE WIDTH
+*/
+.animate-width.ng-hide-add,
+.animate-width.ng-hide-remove
+{
+    overflow-x: hidden;
+
+    max-width: 0;
+}
+
+.animate-width.ng-hide-remove.ng-hide-remove-active
+{
+    overflow-x: hidden;
+
+    max-width: 500px;
+}
+.animate-width.ng-hide-add
+{
+    overflow-x: hidden;
+
+    max-width: 500px;
+}
+.animate-width.ng-hide-add.ng-hide-add-active
+{
+    overflow-x: hidden;
+
+    max-width: 0;
+}
