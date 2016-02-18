@@ -1368,3 +1368,51 @@ ANIMATE WIDTH
 
     max-width: 0;
 }
+
+
+/*
+===================
+RESPONSIVE DESIGN
+*/
+/*col-md*/
+@media (max-width:1500px)
+{
+    .cartel-container
+    {
+        width : 60%;
+    }
+}
+
+/*col-sm*/
+@media (max-width:992px)
+{
+    .cartel-container
+    {
+        width : 50%;
+        font-size : .6pc;
+    }
+    .zoom-controls-container
+    {
+        top : 1.5em;
+    }
+}
+
+/* col-xs */
+@media (max-width :768px)
+{
+    .cartel-container
+    {
+        display : none;
+    }
+    .col-right
+     {
+        font-size : .5em;
+     }
+
+     .zoom-controls-container
+     {
+        font-size : .7em;
+        right : unset;
+        left : 1em;
+     }
+}
