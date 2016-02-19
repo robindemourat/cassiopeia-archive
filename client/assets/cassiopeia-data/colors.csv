@@ -1,4 +1,7 @@
-query;color;name
-planète,planet;#8BD0E4;planet related
-activism,activismo,activisme,activist,activiste,activista,activists,activistes,activistes;#C3390F;activism related
-nature;#85C497;nature related
+"query";"color";"name"
+"planète,planet,earth,terre,nabure,globe";"#8BD0E4";"planet related"
+"activism,activismo,activisme,activist,activiste,activista,activists,activistes,activistes";"#ED4300";"activism related"
+"hollande,segolene,royal,ségolène,françois,fabius";"#6200FF";"french politics"
+"énergie,energy";"#85C497";"energy"
+"carbon,charbon,CO2":"#2361A8":"carbon"
+"lobby,lobbies,sponsor,sponsors";"#8C141C";lobbies and sponsors

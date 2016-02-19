@@ -54,6 +54,27 @@ angular.module('cassiopeiaApp')
             onUpdate = false,
             scaleX = d3.scale.linear().range([0, 100]);
 
+        //update-related vars
+        var width,
+            height,
+            min,
+            max,
+            minVal,
+            maxVal,
+            scaleY,
+            barWidth,
+            ticksType,
+            xDate,
+            xAxis,
+            bars,
+            enter,
+            data,
+            y,
+            x,
+            stacks,
+            displaceY
+            ;
+
 
         //setting brush if specified - I use this method instead of adding another boolean attribute brush to the component
         if(scope.brushOutputEvt){
@@ -130,7 +151,7 @@ angular.module('cassiopeiaApp')
         var onBarHover = function(d){
 
 
-              var data = d;
+              data = d;
               if(onUpdate){
                 return;
               }else{
@@ -186,25 +207,7 @@ angular.module('cassiopeiaApp')
               tooltip1.transition().duration(scope.shortTransitions).style('opacity', 0).each('end', function(){d3.select(this).style('z-index', -1)});
           };
 
-        var width,
-            height,
-            min,
-            max,
-            minVal,
-            maxVal,
-            scaleY,
-            barWidth,
-            ticksType,
-            xDate,
-            xAxis,
-            bars,
-            enter,
-            data,
-            y,
-            x,
-            stacks,
-            displaceY
-            ;
+
         var update = function(data){
           if(!data)
             return;
@@ -483,6 +486,8 @@ angular.module('cassiopeiaApp')
         /*
         INITIALISATION
         */
+        var maxCount,
+            opScale;
         var initWatchers = function(){
           $rootScope.$on(scope.dataEvt, function(e, d){
 
@@ -499,8 +504,8 @@ angular.module('cassiopeiaApp')
 
           $rootScope.$on('overUser', function(e, user){
 
-            var maxCount = 0,
-                opScale = d3.scale.linear().range([.05, 1]);//todo : init on top
+            maxCount = 0;
+            opScale = d3.scale.linear().range([.05, 1]);//todo : init on top
             barsContainer
             .selectAll('.bar')
             .each(function(d, i){

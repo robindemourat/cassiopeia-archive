@@ -161,7 +161,7 @@ angular.module('cassiopeiaApp')
         $scope.displayedTweetsLength = $scope.displayedTweetsSpan;//computed length of tweet list
         $scope.tempFilterValue = '';
 
-        $scope.minimumSpan = min * 30;
+        $scope.minimumSpan = min * 10;
         $scope.maximumSpan = day;
 
         $scope.filters = [];
@@ -602,7 +602,9 @@ angular.module('cassiopeiaApp')
         //update content
         //csv content
         if(content){
-            var vals = content.split('\n');
+            var vals = content.split('\n').map(function(val){
+                return val.replace(/"/g, '');
+            });
             for(var i = 1; i < vals.length ; i++){
                 var detail = vals[i].split(';');
                 var expressions = detail[0].split(',');
