@@ -110,7 +110,29 @@ angular.module( 'cassiopeiaApp' )
          }
         }//end flash tooltip
 
+
+        var onHover = function( d, i ){
+
+                if( onUpdate ){
+                  return;
+                }
+
+                svg.selectAll( '.cassiopeia-user' )
+                .transition()
+                .duration( scope.mediumTransitions )
+                .style( 'opacity', .4 );
+
+                d3.select( this )
+                .transition()
+                .duration( scope.mediumTransitions )
+                .style( 'opacity', 1 );
+
+                $rootScope.$broadcast( 'overUser', d );
+
+            };
+
         //UPDATE FUNCTION
+        var maxTweets, minTweets,enter,data,children, lastTweet, els, vals;
         var update = function( e, data ){
           onUpdate = true;
           $timeout( function(){
@@ -136,12 +158,12 @@ angular.module( 'cassiopeiaApp' )
                               return d.firstUpdateOnTopic;
                           }, begin, end, data.timeline.timeSpan );
 
-          resize();
+          // resize();
 
-          var maxTweets = d3.max( users, function( d ){
+          maxTweets = d3.max( users, function( d ){
                                     return d.values.length;
-                                } ),
-              minTweets = d3.min( users, function( d ){
+                                } );
+          minTweets = d3.min( users, function( d ){
                                       return d.values.length;
                                   } );
 
@@ -154,13 +176,14 @@ angular.module( 'cassiopeiaApp' )
 
           nbTweets = data.tweets.length;
 
+
           //DATA BINDING
-          var els = svg.selectAll( '.cassiopeia-user' )
+          els = svg.selectAll( '.cassiopeia-user' )
                         .data( users, function( d,i ){
                             return d.user.id;
                         } );
           //ENTER
-          var enter = els
+          enter = els
                         .enter()
                           .append( 'g' )
                             .attr( 'class', 'cassiopeia-user' )
@@ -168,19 +191,92 @@ angular.module( 'cassiopeiaApp' )
                                   return 'translate( '+x( end )+','+y( 0 )+' )scale( 0 )';
                               } );
 
+          //transparent circle for interactivity
+            enter.append( 'circle' )
+            .attr( 'class', 'subshape' )
+            .attr( 'cx', 0 )
+            .attr( 'cy', 0 )
+            .attr( 'r', function( d ){
+                return radiusScale( d.values.length );
+            } );
+
+            enter
+            .append( 'circle' )
+            .attr( 'class', 'shape' )
+            .attr( 'cx', 0 )
+            .attr( 'cy', 0 )
+            .attr( 'r', function( d ){
+                return 0.1;//radiusScale( d.values.length );
+            } )
+            .style( 'fill', function( d ){
+                return d.color?d.color:'#FFDFC2';
+            } );
+
+            enter
+            .append( 'circle' )
+            .attr( 'class', 'stroke' )
+            .attr( 'cx', 0 )
+            .attr( 'cy', 0 )
+            .attr( 'r', function( d ){
+                return 0.1;
+            } );
+
+
+            enter.on( 'mouseover', onHover )
+            .on( 'mousemove', onHover )
+            .on( 'mouseleave', function( d ){
+                if( onUpdate ){
+                  return;
+                }
+                svg.selectAll( '.cassiopeia-user' )
+                .transition()
+                .duration( scope.mediumTransitions )
+                .style( 'opacity', .8 );
+                $rootScope.$broadcast( 'outUser', d );
+
+
+                tweetTooltip
+                .transition()
+                .duration( scope.mediumTransitions )
+                   .style( 'opacity', 1e-6 )
+                   .each( 'end', function(){
+                       d3.select( this ).style( 'z-index', -1 );
+                   } );
+            } )
+            .on( 'click', function( d ){
+                if( onUpdate ){
+                  return;
+                }
+                $rootScope.$broadcast( 'userClicked', d )
+            } );
+
+
+
+
+            //hover user
+            enter.selectAll( 'circle' )
+            .on( 'mouseover', function( d ){
+                if( onUpdate ){
+                  return;
+                }
+                if( scope.externalInfo == "false" ){
+                    flashTooltip( d.values[0] );
+                }
+            } );
+
           //CHILDREN
           if( showChildren ){
             els.each( function( d,i ){
-              var data = d;
-              var vals = data.values.slice( 1 );
+              data = d;
+              vals = data.values.slice( 1 );
               // console.log(vals);
-              var children = d3.select( this )
+              children = d3.select( this )
                                 .selectAll( '.cassiopeia-tweet' )
                                   .data( vals, function(d, ind){
                                     return d.user_id + ind;
                                   } );
 
-              var enter = children
+              enter = children
                             .enter()
                               .append( 'g' )
                                 .attr( 'class', 'cassiopeia-tweet' )
@@ -239,105 +335,13 @@ angular.module( 'cassiopeiaApp' )
               d3.selectAll( '.cassiopeia-tweet' ).remove();
           }
 
-            //transparent circle for interactivity
-            enter.append( 'circle' )
-            .attr( 'class', 'subshape' )
-            .attr( 'cx', 0 )
-            .attr( 'cy', 0 )
-            .attr( 'r', function( d ){
-                return radiusScale( d.values.length );
-            } );
 
-            enter
-            .append( 'circle' )
-            .attr( 'class', 'shape' )
-            .attr( 'cx', 0 )
-            .attr( 'cy', 0 )
-            .attr( 'r', function( d ){
-                return 0.1;//radiusScale( d.values.length );
-            } )
-            .style( 'fill', function( d ){
-                return d.color?d.color:'#FFDFC2';
-            } );
-
-            enter
-            .append( 'circle' )
-            .attr( 'class', 'stroke' )
-            .attr( 'cx', 0 )
-            .attr( 'cy', 0 )
-            .attr( 'r', function( d ){
-                return 0.1;
-            } );
-
-            var onHover = function( d, i ){
-
-                if( onUpdate ){
-                  return;
-                }
-
-                svg.selectAll( '.cassiopeia-user' )
-                .transition()
-                .duration( scope.mediumTransitions )
-                .style( 'opacity', .4 );
-
-                d3.select( this )
-                .transition()
-                .duration( scope.mediumTransitions )
-                .style( 'opacity', 1 );
-
-                $rootScope.$broadcast( 'overUser', d );
-
-            };
-
-
-
-            enter.on( 'mouseover', onHover )
-            .on( 'mousemove', onHover )
-            .on( 'mouseleave', function( d ){
-                if( onUpdate ){
-                  return;
-                }
-                svg.selectAll( '.cassiopeia-user' )
-                .transition()
-                .duration( scope.mediumTransitions )
-                .style( 'opacity', .8 );
-                $rootScope.$broadcast( 'outUser', d );
-
-
-                tweetTooltip
-                .transition()
-                .duration( scope.mediumTransitions )
-                   .style( 'opacity', 1e-6 )
-                   .each( 'end', function(){
-                       d3.select( this ).style( 'z-index', -1 );
-                   } );
-            } )
-            .on( 'click', function( d ){
-                if( onUpdate ){
-                  return;
-                }
-                $rootScope.$broadcast( 'userClicked', d )
-            } );
-
-
-
-
-            //hover user
-            enter.selectAll( 'circle' )
-            .on( 'mouseover', function( d ){
-                if( onUpdate ){
-                  return;
-                }
-                if( scope.externalInfo == "false" ){
-                    flashTooltip( d.values[0] );
-                }
-            } )
 
             //tooltip on new tweet
-               if( scope.externalInfo == 'false' && onNewTweet ){
-                   var lastTweet = data.tweets[data.tweets.length - 1];
-                   flashTooltip( lastTweet, true );
-               }
+             if( scope.externalInfo == 'false' && onNewTweet ){
+                 lastTweet = data.tweets[data.tweets.length - 1];
+                 flashTooltip( lastTweet, true );
+             }
 
 
 
@@ -395,14 +399,16 @@ angular.module( 'cassiopeiaApp' )
 
 
             resize();
+            maxTweets=minTweets=enter=data=children=lastTweet=els=vals=null;
           };//end of update function
 
 
           /*
               RESIZE CUISINE - TO IMPROVE
           */
+          var dims, nodeSize,wSize,hSize;
           var resize = function(){
-            var dims = getElementDimensions();
+            dims = getElementDimensions();
 
             x.range( [0, dims.w] );
             y.range( [0, dims.h] );
@@ -411,8 +417,8 @@ angular.module( 'cassiopeiaApp' )
             if( !nodeSize )
                 return;
 
-            var wSize = ( dims.w ) * nodeSize[0];
-            var hSize = ( dims.h ) * nodeSize[1];
+            wSize = ( dims.w ) * nodeSize[0];
+            hSize = ( dims.h ) * nodeSize[1];
             actualNodeSize = ( wSize < hSize )?wSize:hSize;
 
             d3.selectAll( '.cassiopeia-user' )
@@ -447,7 +453,7 @@ angular.module( 'cassiopeiaApp' )
             .attr( 'y2', function( d ){
                 return y( d.nextrely );
             } );
-
+            dims=nodeSize=wSize=hSize=null;
           }
 
           var getElementDimensions = function () {

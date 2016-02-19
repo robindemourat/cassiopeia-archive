@@ -127,73 +127,7 @@ angular.module('cassiopeiaApp')
           updateBrush({begin_abs : brush_prev_begin, end_abs : brush_prev_end});
         }
 
-        var update = function(data){
-          if(!data)
-            return;
-
-          onUpdate = true;
-          $timeout(function(){
-            onUpdate = false;
-          }, scope.longTransitions);
-
-          var width = element.width(),
-            height = element.height(),
-            min = data.begin_abs,
-            max = data.end_abs,
-            minVal = d3.min(data.timeslots, function(d){return d.count}),
-            maxVal = d3.max(data.timeslots, function(d){return d.count}),
-            scaleY = d3.scale.linear().domain([0, maxVal]).range([0, visPercentHeight]),
-            barWidth = 100/(data.timeslots.length+1),
-            ticksType = DateUtils.computeTicksType(min, max),
-            xDate = d3.time.scale()
-                      .domain([new Date(min), ticksType.scale.offset(new Date(max), 1)])
-                      .range([0, 100]),
-            xAxis = d3.svg.axis()
-                      .scale(xDate)
-                      .orient("bottom")
-                      .ticks(ticksType.scale, ticksType.interval)
-                      .tickFormat(ticksType.formatting)
-                      .tickSize(0)
-                      .tickPadding(8);
-
-          scaleX = d3.scale.linear()
-                    .domain([data.begin_abs,data.end_abs])
-                    .range([0, 100]);
-
-          if(brush){
-            brushScale = d3.scale.linear().range([0, angular.element(element).width()])
-            .domain([data.begin_abs,data.end_abs]);
-            brush.x(brushScale);
-          }
-
-
-          var bars = barsContainer.selectAll('.bar').data(data.timeslots, function(slot){
-            return slot.begin_abs;
-          });
-
-          var enter = bars
-            .enter()
-            .append('g')
-            .attr('class', 'bar');
-
-          enter
-            .append('rect')
-            .attr('class', 'main-bar')
-            .attr('y', function(d){
-                return visPercentHeight+ '%';
-              })
-            .attr('width', function(d){
-              return barWidth + '%';
-            })
-            .attr('x', function(d, i){
-                return (scaleX(d.begin_abs)) + '%';
-              })
-            .attr('height', function(d, i){
-                return scaleY(d.count) + '%';
-            });
-
-
-          var onBarHover = function(d){
+        var onBarHover = function(d){
 
 
               var data = d;
@@ -252,13 +186,100 @@ angular.module('cassiopeiaApp')
               tooltip1.transition().duration(scope.shortTransitions).style('opacity', 0).each('end', function(){d3.select(this).style('z-index', -1)});
           };
 
+        var width,
+            height,
+            min,
+            max,
+            minVal,
+            maxVal,
+            scaleY,
+            barWidth,
+            ticksType,
+            xDate,
+            xAxis,
+            bars,
+            enter,
+            data,
+            y,
+            x,
+            stacks,
+            displaceY
+            ;
+        var update = function(data){
+          if(!data)
+            return;
+
+          onUpdate = true;
+          $timeout(function(){
+            onUpdate = false;
+          }, scope.longTransitions);
+
+          width = element.width(),
+          height = element.height(),
+          min = data.begin_abs,
+          max = data.end_abs,
+          minVal = d3.min(data.timeslots, function(d){return d.count}),
+          maxVal = d3.max(data.timeslots, function(d){return d.count}),
+          scaleY = d3.scale.linear().domain([0, maxVal]).range([0, visPercentHeight]),
+          barWidth = 100/(data.timeslots.length+1),
+          ticksType = DateUtils.computeTicksType(min, max),
+          xDate = d3.time.scale()
+                    .domain([new Date(min), ticksType.scale.offset(new Date(max), 1)])
+                    .range([0, 100]),
+          xAxis = d3.svg.axis()
+                    .scale(xDate)
+                    .orient("bottom")
+                    .ticks(ticksType.scale, ticksType.interval)
+                    .tickFormat(ticksType.formatting)
+                    .tickSize(0)
+                    .tickPadding(8);
+
+          scaleX = d3.scale.linear()
+                    .domain([data.begin_abs,data.end_abs])
+                    .range([0, 100]);
+
+          if(brush){
+            brushScale = d3.scale.linear().range([0, angular.element(element).width()])
+            .domain([data.begin_abs,data.end_abs]);
+            brush.x(brushScale);
+          }
+
+
+          bars = barsContainer.selectAll('.bar').data(data.timeslots, function(slot){
+            return slot.begin_abs;
+          });
+
+          enter = bars
+            .enter()
+            .append('g')
+            .attr('class', 'bar');
+
+          enter
+            .append('rect')
+            .attr('class', 'main-bar')
+            .attr('y', function(d){
+                return visPercentHeight+ '%';
+              })
+            .attr('width', function(d){
+              return barWidth + '%';
+            })
+            .attr('x', function(d, i){
+                return (scaleX(d.begin_abs)) + '%';
+              })
+            .attr('height', function(d, i){
+                return scaleY(d.count) + '%';
+            });
+
+
+
+
           enter
             .on('mouseover', onBarHover)
             .on('mousemove', function(d){
               if(d3.select(this).style('opacity') != 1)
                 onBarHover(d);
-              var y = (window.innerHeight - d3.event.pageY + 30),
-                  x = (d3.event.pageX-tooltip1[0][0].offsetWidth/2);
+                y = (window.innerHeight - d3.event.pageY + 30);
+                x = (d3.event.pageX-tooltip1[0][0].offsetWidth/2);
               if(x < 20)
                 x = 20;
               else if (x + tooltip1[0][0].offsetWidth > window.innerWidth)
@@ -319,12 +340,12 @@ angular.module('cassiopeiaApp')
           bars.each(function(d,i){
 
             if(d.colors){
-              var data = d;
+              data = d;
 
-              var stacks = d3.select(this).selectAll('.color').data(d.colors);
+              stacks = d3.select(this).selectAll('.color').data(d.colors);
               //ENTER
-              var displaceY = visPercentHeight;
-              var enter = stacks
+              displaceY = visPercentHeight;
+              enter = stacks
                             .enter()
                             .append('rect')
                             .attr('class', 'color')
@@ -405,6 +426,7 @@ angular.module('cassiopeiaApp')
             return (visPercentHeight+tickHeight)+'%'
           });
 
+          width=height=min=max=minVal=maxVal=barWidth=ticksType=xDate=xAxis=bars=enter=data=y=x=stacks=displaceY=null;
         };
 
         var updateBrush = function(d){

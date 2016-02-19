@@ -230,6 +230,7 @@ angular.module('cassiopeiaApp')
             $scope.$apply();
         }, 2000);
 
+        data = null;
     };
 
 
