@@ -75,7 +75,7 @@ angular.module('cassiopeiaApp')
           }else if(range >= 3 * minute){
             unit = 'minute';
             interval = 1;
-            formatting = '%d %b, %Y%H:%M';
+            formatting = '%d %b %Y, %H:%M';
           }else{
             unit = 'second';
             interval = 10;

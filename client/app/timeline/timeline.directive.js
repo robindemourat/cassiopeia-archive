@@ -72,7 +72,8 @@ angular.module('cassiopeiaApp')
             y,
             x,
             stacks,
-            displaceY
+            displaceY,
+            exit
             ;
 
 
@@ -208,9 +209,20 @@ angular.module('cassiopeiaApp')
           };
 
 
+        var prevBegin, prevSpan, mode;
+
         var update = function(data){
           if(!data)
             return;
+
+          if(data.begin_abs > prevBegin){
+            mode = 'forward';
+          }else{
+            mode = 'backward';
+          }
+
+          prevBegin = data.begin_abs;
+          prevSpan =  data.end_abs - data.begin_abs;
 
           onUpdate = true;
           $timeout(function(){
@@ -300,6 +312,34 @@ angular.module('cassiopeiaApp')
 
           container.on('mouseout', onBarEndHover);
 
+
+
+          exit = bars.exit();
+
+          exit
+            .style('opacity', 1)
+            .transition()
+              .duration(scope.longTransitions)
+                .attr('transform', function(){
+                  return (mode === 'forward')?'translate(-2000, 0)':'translate(2000, 0)';
+                })
+                .style('opacity', 0e-1)
+                  .remove();
+          /*exit
+            .select('.main-bar')
+            .transition()
+            .duration(scope.longTransitions * 10)
+            .attr('x', function(){
+              return 0.01;
+            })
+            .attr('y', function(){
+              return visPercentHeight + '%';
+            })
+            .attr('height', 0.01)
+            .attr('opacity', 0.01);*/
+
+
+          //update
           bars
             .select('.main-bar')
             .transition()
@@ -321,23 +361,6 @@ angular.module('cassiopeiaApp')
             })
             ;
 
-          bars
-            .exit()
-              .attr('opacity', 1)
-                .transition()
-                  .duration(scope.longTransitions)
-                    .attr('opacity', 0.1)
-                      .remove();
-          bars
-            .exit()
-              .select('.main-bar')
-              .transition()
-              .duration(scope.mediumTransitions)
-              .attr('y', function(){
-                return visPercentHeight + '%';
-              })
-              .attr('height', 0)
-
 
           //STACKS UPDATE
           bars.each(function(d,i){
@@ -345,7 +368,9 @@ angular.module('cassiopeiaApp')
             if(d.colors){
               data = d;
 
-              stacks = d3.select(this).selectAll('.color').data(d.colors);
+              stacks = d3.select(this).selectAll('.color').data(d.colors, function(d){
+                return d.color;
+              });
               //ENTER
               displaceY = visPercentHeight;
               enter = stacks
@@ -353,8 +378,9 @@ angular.module('cassiopeiaApp')
                             .append('rect')
                             .attr('class', 'color')
                             .attr('y', function(d){
-                                displaceY -= scaleY(d.count);
-                                return displaceY+ '%';
+                                // displaceY -= scaleY(d.count);
+                                // return displaceY+ '%';
+                                return visPercentHeight + '%';
                               })
                             .attr('width', function(d){
                               return barWidth + '%';
@@ -368,7 +394,9 @@ angular.module('cassiopeiaApp')
                             .attr('fill', function(d){
                               return d.color;
                             });
+
               displaceY = visPercentHeight;
+
               stacks
                 .transition()
                 .duration(scope.longTransitions)
@@ -393,7 +421,16 @@ angular.module('cassiopeiaApp')
                 })
                 ;
 
-              stacks.exit().remove();
+              stacks.exit()
+              .style('opacity', 1)
+              .transition()
+              .duration(scope.mediumTransitions)
+              .attr('y', function(){
+                return visPercentHeight + '%';
+              })
+              .attr('height', 0)
+              .style('opacity', 0e-6)
+              .remove();
 
             }
           });

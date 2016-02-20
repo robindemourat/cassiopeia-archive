@@ -185,7 +185,6 @@ angular.module('cassiopeiaApp')
             data.timeline = updateTimelineProfile(data.tweets, /*$scope.fromDate, $scope.toDate*/undefined, undefined, $scope.colors);
             $scope.fromDate = data.timeline.begin_abs;
             $scope.toDate = data.timeline.end_abs;
-            $scope.activeTimeSpan = $scope.toDate - $scope.fromDate;
             $scope.zoomLevel = $scope.activeTimeSpan / ($scope.maximumSpan - $scope.minimumSpan);
         }
 
@@ -241,6 +240,9 @@ angular.module('cassiopeiaApp')
         $scope.loading = true;
         var dataRequest = '/api/slice/'+parseInt(timespan[0])+'/'+parseInt(timespan[1]);
         console.info('launching local data request ', dataRequest);
+        $scope.fromDate = timespan[0];
+        $scope.toDate = timespan[1];
+        $scope.activeTimeSpan = $scope.toDate - $scope.fromDate;
         $http
             .get(dataRequest)
             .success(onLocalUpdate)
@@ -256,6 +258,7 @@ angular.module('cassiopeiaApp')
 
     $scope.seekForward = function(){
         var wanted = $scope.fromDate + $scope.activeTimeSpan/4;
+
         if(wanted <= $scope.absoluteEnd){
             $scope.getLocalData([wanted, wanted + $scope.activeTimeSpan]);
         }else{
