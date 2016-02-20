@@ -1421,6 +1421,16 @@ RESPONSIVE DESIGN
     {
         top : 1.5em;
     }
+
+    .options-main-container
+    {
+        font-size : .8em;
+    }
+
+    .colors-filter-container
+    {
+        font-size : .7em;
+    }
 }
 
 /* col-xs */
