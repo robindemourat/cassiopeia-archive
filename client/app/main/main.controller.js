@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('cassiopeiaApp')
-  .controller('MainCtrl', function ($scope, $http, $interval, $rootScope, $timeout, $location, $log, DateUtils) {
+  .controller('MainCtrl', function ($scope, $http, $interval, $rootScope, $timeout, $location, $log, DateUtils, Angularytics) {
 
     var begin = true;
 
@@ -34,6 +34,7 @@ angular.module('cassiopeiaApp')
         });
 
         $rootScope.$on('newtimespan', function(e, timespan){
+            Angularytics.trackEvent("Interaction", "New time span");
             $scope.getLocalData(timespan);
         })
 
@@ -56,7 +57,7 @@ angular.module('cassiopeiaApp')
         });
 
         $rootScope.$on('userClicked', function(d, user){
-
+            Angularytics.trackEvent("Interation", "User clicked");
             addFilter({
                 user_id : user.user.id,
                 type : 'user',
@@ -68,7 +69,7 @@ angular.module('cassiopeiaApp')
         });
 
         $rootScope.$on('clickPeriod', function(e, period){
-            console.log('click period ', e);
+            Angularytics.trackEvent("Interation", "Period clicked");
             $scope.fromDate = period.begin_abs;
             $scope.toDate = period.end_abs;
             $scope.getLocalData([$scope.fromDate, $scope.toDate]);
@@ -84,6 +85,7 @@ angular.module('cassiopeiaApp')
         });
 
         $scope.$watch('autoPlay', function(autoPlay){
+            Angularytics.trackEvent("Interaction", "Autoplay set");
             if(autoPlay){
                 $scope.seekForward();
             }
@@ -257,6 +259,7 @@ angular.module('cassiopeiaApp')
     */
 
     $scope.seekForward = function(){
+        Angularytics.trackEvent("Interaction", "Forward/backward used");
         var wanted = $scope.fromDate + $scope.activeTimeSpan/4;
 
         if(wanted <= $scope.absoluteEnd){
@@ -267,13 +270,16 @@ angular.module('cassiopeiaApp')
     }
 
     $scope.seekBackward = function(){
+        Angularytics.trackEvent("Interaction", "Forward/backward used");
         var wanted = $scope.fromDate - $scope.activeTimeSpan/4;
+
         if(wanted >= $scope.absoluteBegin){
             $scope.getLocalData([wanted, wanted + $scope.activeTimeSpan]);
         }
     }
 
     $scope.zoomTo = function(newZoom){
+        Angularytics.trackEvent("Interaction", "Zoom changed");
         var newSpan = ($scope.maximumSpan - $scope.minimumSpan)* newZoom;
         if(newSpan >= $scope.minimumSpan && newSpan <= $scope.maximumSpan){
             var middle = $scope.fromDate + ($scope.toDate - $scope.fromDate) / 2;
@@ -594,6 +600,8 @@ angular.module('cassiopeiaApp')
         if(!expr || !col || !name){
             return;
         }
+        Angularytics.trackEvent("Interaction", "color added");
+
         $scope.tempColorExpression = "";
         $scope.tempColorName = "";
         $scope.tempLegend = "";
@@ -648,6 +656,7 @@ angular.module('cassiopeiaApp')
     /* color file upload */
 
     $scope.$watch('files', function () {
+            Angularytics.trackEvent("Interaction", "Color file uploaded");
             $scope.uploadcolorfile($scope.files);
     });
 

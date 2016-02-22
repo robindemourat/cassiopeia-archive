@@ -8,8 +8,14 @@ angular.module('cassiopeiaApp', [
   'ngAnimate',
   'ui.bootstrap',
   'ngFileUpload',
-  'angulike'
+  'angulike',
+  'angularytics'
 ])
-  .config(function ($locationProvider) {
+  .config(function ($locationProvider, AngularyticsProvider) {
     $locationProvider.html5Mode(true);
+    // AngularyticsProvider.setEventHandlers(['Console', 'GoogleUniversal']);
+    AngularyticsProvider.setEventHandlers(['GoogleUniversal']);
+    AngularyticsProvider.setPageChangeEvent(undefined);
+  }).run(function(Angularytics) {
+    Angularytics.init();
   });
