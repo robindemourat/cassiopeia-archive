@@ -85,10 +85,9 @@ angular.module( 'cassiopeiaApp' )
 
          if( element[0][0] ){
 
-           var w = tweetTooltip[0][0].offsetWidth,
-               h = tweetTooltip[0][0].offsetHeight;
+           var w = angular.element(tweetTooltip[0][0]).width(),
+               h = angular.element(tweetTooltip[0][0]).height();
 
-           // var top = ( auto === true )?pos.top - h/2:d3.event.offsetY - h/2;
            var top = ( auto === true )?pos.top + h/2:d3.event.offsetY + h/2;
            var right = ( auto === true )?50:window.innerWidth - d3.event.offsetX +50;
 
@@ -129,10 +128,19 @@ angular.module( 'cassiopeiaApp' )
 
                 $rootScope.$broadcast( 'overUser', d );
 
-            };
+        };
 
         //UPDATE FUNCTION
-        var maxTweets, minTweets,enter,data,children, lastTweet, els, vals;
+        var maxTweets,
+            minTweets,
+            enter,
+            data,
+            children,
+            lastTweet,
+            els,
+            vals
+            ;
+
         var update = function( e, data ){
           onUpdate = true;
           $timeout( function(){
@@ -158,8 +166,6 @@ angular.module( 'cassiopeiaApp' )
                               return d.firstUpdateOnTopic;
                           }, begin, end, data.timeline.timeSpan );
 
-          // resize();
-
           maxTweets = d3.max( users, function( d ){
                                     return d.values.length;
                                 } );
@@ -184,42 +190,43 @@ angular.module( 'cassiopeiaApp' )
                         } );
           //ENTER
           enter = els
-                        .enter()
-                          .append( 'g' )
-                            .attr( 'class', 'cassiopeia-user' )
-                              .attr( 'transform', function( d ){
-                                  return 'translate( '+x( end )+','+y( 0 )+' )scale( 0 )';
-                              } );
+                    .enter()
+                      .append( 'g' )
+                        .attr( 'class', 'cassiopeia-user' )
+                          .attr( 'transform', function( d ){
+                              return 'translate( '+x( end )+','+y( 0 )+' )scale( 0 )';
+                          } );
 
           //transparent circle for interactivity
-            enter.append( 'circle' )
-            .attr( 'class', 'subshape' )
-            .attr( 'cx', 0 )
-            .attr( 'cy', 0 )
-            .attr( 'r', function( d ){
-                return radiusScale( d.values.length );
-            } );
+            enter
+              .append( 'circle' )
+                .attr( 'class', 'subshape' )
+                  .attr( 'cx', 0 )
+                    .attr( 'cy', 0 )
+                      .attr( 'r', function( d ){
+                          return radiusScale( d.values.length );
+                      } );
 
             enter
-            .append( 'circle' )
-            .attr( 'class', 'shape' )
-            .attr( 'cx', 0 )
-            .attr( 'cy', 0 )
-            .attr( 'r', function( d ){
-                return 0.1;//radiusScale( d.values.length );
-            } )
-            .style( 'fill', function( d ){
-                return d.color?d.color:'#FFDFC2';
-            } );
+              .append( 'circle' )
+                .attr( 'class', 'shape' )
+                  .attr( 'cx', 0 )
+                    .attr( 'cy', 0 )
+                      .attr( 'r', function( d ){
+                          return 0.1;//radiusScale( d.values.length );
+                      } )
+                        .style( 'fill', function( d ){
+                            return d.color?d.color:'#FFDFC2';
+                        } );
 
             enter
-            .append( 'circle' )
-            .attr( 'class', 'stroke' )
-            .attr( 'cx', 0 )
-            .attr( 'cy', 0 )
-            .attr( 'r', function( d ){
-                return 0.1;
-            } );
+              .append( 'circle' )
+                .attr( 'class', 'stroke' )
+                  .attr( 'cx', 0 )
+                    .attr( 'cy', 0 )
+                      .attr( 'r', function( d ){
+                          return 0.1;
+                      } );
 
 
             enter.on( 'mouseover', onHover )
@@ -229,32 +236,32 @@ angular.module( 'cassiopeiaApp' )
                   return;
                 }
                 svg.selectAll( '.cassiopeia-user' )
-                .transition()
-                .duration( scope.mediumTransitions )
-                .style( 'opacity', .8 );
+                  .transition()
+                    .duration( scope.mediumTransitions )
+                      .style( 'opacity', .8 );
+
                 $rootScope.$broadcast( 'outUser', d );
 
-
                 tweetTooltip
-                .transition()
-                .duration( scope.mediumTransitions )
-                   .style( 'opacity', 1e-6 )
-                   .each( 'end', function(){
-                       d3.select( this ).style( 'z-index', -1 );
-                   } );
+                  .transition()
+                    .duration( scope.mediumTransitions )
+                       .style( 'opacity', 1e-6 )
+                         .each( 'end', function(){
+                             d3.select( this ).style( 'z-index', -1 );
+                         } );
             } )
-            .on( 'click', function( d ){
-                if( onUpdate ){
-                  return;
-                }
-                $rootScope.$broadcast( 'userClicked', d )
-            } );
+          .on( 'click', function( d ){
+              if( onUpdate ){
+                return;
+              }
+              $rootScope.$broadcast( 'userClicked', d )
+          } );
 
 
 
 
-            //hover user
-            enter.selectAll( 'circle' )
+          //hover user
+          enter.selectAll( 'circle' )
             .on( 'mouseover', function( d ){
                 if( onUpdate ){
                   return;
@@ -266,7 +273,9 @@ angular.module( 'cassiopeiaApp' )
 
           //CHILDREN
           if( showChildren ){
+
             els.each( function( d,i ){
+
               data = d;
               vals = data.values.slice( 1 );
               // console.log(vals);
@@ -311,20 +320,20 @@ angular.module( 'cassiopeiaApp' )
 
               children
                 .select( '.mini-shape' )
-                .style( 'fill', function( t ){
-                    return ( t.color )?t.color:'#FFDFC2';
-                } );
+                  .style( 'fill', function( t ){
+                      return ( t.color )?t.color:'#FFDFC2';
+                  } );
 
               children
                 .select( '.connection' )
-                .transition()
-                .duration(scope.longTransitions)
-                .attr('x2', function(d){
-                  return x(d.nextrelx);
-                })
-                .attr('y2', function(d){
-                  return y(d.nextrely);
-                })
+                  .transition()
+                  .duration(scope.longTransitions)
+                    .attr('x2', function(d){
+                      return x(d.nextrelx);
+                    })
+                      .attr('y2', function(d){
+                        return y(d.nextrely);
+                      });
 
 
               children.exit().remove();
@@ -337,140 +346,133 @@ angular.module( 'cassiopeiaApp' )
 
 
 
-            //tooltip on new tweet
-             if( scope.externalInfo == 'false' && onNewTweet ){
-                 lastTweet = data.tweets[data.tweets.length - 1];
-                 flashTooltip( lastTweet, true );
-             }
+          //tooltip on new tweet
+           if( scope.externalInfo == 'false' && onNewTweet && data.tweets){
+               lastTweet = data.tweets[data.tweets.length - 1];
+               flashTooltip( lastTweet, true );
+           }
 
-
-
-            //EXIT
-            els
+          //EXIT
+          els
             .exit()
-            .style( 'opacity', .8 )
-            .attr( 'class', 'exit' )
-            .remove()
-            ;
+              .style( 'opacity', .8 )
+                .attr( 'class', 'exit' )
+                  .remove()
+                  ;
 
-            //UPDATE
-            //position update
-            els
+          //UPDATE
+          //position update
+          els
             .transition()
             .duration( scope.longTransitions )
-            .attr( 'transform', function( d ){
-                return 'translate( '+x( d.x )+','+y( d.y )+' )scale( 1 )';
-            } );
+              .attr( 'transform', function( d ){
+                  return 'translate( '+x( d.x )+','+y( d.y )+' )scale( 1 )';
+              } );
 
-            //shapes update
-            els
-            .select( '.subshape' )
+          //shapes update
+          els.select( '.subshape' )
             .transition()
             .duration( scope.mediumTransitions )
-            .attr( 'r', function( d ){
-                return radiusScale( .1 + d.values.length )*2;
-            } );
+              .attr( 'r', function( d ){
+                  return radiusScale( .1 + d.values.length )*2;
+              } );
 
 
-            els
-            .select( '.stroke' )
+          els.select( '.stroke' )
             .transition()
             .duration( scope.mediumTransitions )
-            .style( 'stroke', function( d ){
-                return ( d.color )?d.color:'#FFDFC2';
-            } )
-            .attr( 'r', function( d ){
-                return .2 + radiusScale( d.values.length );
-            } )
-            ;
+              .style( 'stroke', function( d ){
+                  return ( d.color )?d.color:'#FFDFC2';
+              } )
+                .attr( 'r', function( d ){
+                    return .2 + radiusScale( d.values.length );
+                } )
+                ;
 
-            els
-            .select( '.shape' )
+          els.select( '.shape' )
             .transition()
             .delay( scope.mediumTransitions )
             .duration( scope.longTransitions )
-            .attr( 'r', function( d ){
-                return .2 + radiusScale( d.values.length * .8 );
-            } )
-            .style( 'fill', function( d ){
-                return d.color?d.color:'#FFDFC2';
-            } );
+              .attr( 'r', function( d ){
+                  return .2 + radiusScale( d.values.length * .8 );
+              } )
+                .style( 'fill', function( d ){
+                    return d.color?d.color:'#FFDFC2';
+                } );
 
 
 
-            resize();
+          resize();
             maxTweets=minTweets=enter=data=children=lastTweet=els=vals=null;
-          };//end of update function
+        };//end of update function
 
 
-          /*
-              RESIZE CUISINE - TO IMPROVE
-          */
-          var dims, nodeSize,wSize,hSize;
-          var resize = function(){
-            dims = getElementDimensions();
+        /*
+            RESIZE CUISINE - TO IMPROVE
+        */
+        var dims, nodeSize,wSize,hSize;
+        var resize = function(){
+          dims = getElementDimensions();
 
-            x.range( [0, dims.w] );
-            y.range( [0, dims.h] );
+          x.range( [0, dims.w] );
+          y.range( [0, dims.h] );
 
-            var nodeSize = nova.nodeSize();
-            if( !nodeSize )
-                return;
+          var nodeSize = nova.nodeSize();
+          if( !nodeSize )
+              return;
 
-            wSize = ( dims.w ) * nodeSize[0];
-            hSize = ( dims.h ) * nodeSize[1];
-            actualNodeSize = ( wSize < hSize )?wSize:hSize;
+          wSize = ( dims.w ) * nodeSize[0];
+          hSize = ( dims.h ) * nodeSize[1];
+          actualNodeSize = ( wSize < hSize )?wSize:hSize;
 
-            d3.selectAll( '.cassiopeia-user' )
+          d3.selectAll( '.cassiopeia-user' )
             .transition()
             .duration( scope.longTransitions )
-            .attr( 'transform', function( d, i ){
-                return 'translate( '+x( d.x ) + ',' + y( d.y ) + ' )scale( '+actualNodeSize+' )';
-            } );
+              .attr( 'transform', function( d, i ){
+                  return 'translate( '+x( d.x ) + ',' + y( d.y ) + ' )scale( '+actualNodeSize+' )';
+              } );
 
 
-            d3.selectAll( '.cassiopeia-tweet' )
+          d3.selectAll( '.cassiopeia-tweet' )
             .transition()
             .duration( scope.longTransitions )
-            .attr( 'transform', function( d, i ){
-                return 'translate( '+x( d.relx )/actualNodeSize + ',' + y( d.rely )/actualNodeSize + ' )scale( '+1/actualNodeSize /*( 1/( actualNodeSize ))*/+' )';
-            } );
+              .attr( 'transform', function( d, i ){
+                  return 'translate( '+x( d.relx )/actualNodeSize + ',' + y( d.rely )/actualNodeSize + ' )scale( '+1/actualNodeSize /*( 1/( actualNodeSize ))*/+' )';
+              } );
 
-            d3.selectAll( '.cassiopeia-tweet .mini-shape' )
+          d3.selectAll( '.cassiopeia-tweet .mini-shape' )
             .transition()
             .duration( scope.longTransitions )
-            .attr( 'transform', function( d, i ){
-                return 'scale( '+Math.log( actualNodeSize ) * .3 +' )';
-            } );
+              .attr( 'transform', function( d, i ){
+                  return 'scale( '+Math.log( actualNodeSize ) * .3 +' )';
+              } );
 
-
-            d3.selectAll( '.cassiopeia-tweet .connection' )
+          d3.selectAll( '.cassiopeia-tweet .connection' )
             .transition()
             .duration(scope.longTransitions)
-            .attr( 'x2', function( d ){
-                return x( d.nextrelx );
-            } )
-            .attr( 'y2', function( d ){
-                return y( d.nextrely );
-            } );
-            dims=nodeSize=wSize=hSize=null;
-          }
+              .attr( 'x2', function( d ){
+                  return x( d.nextrelx );
+              } )
+                .attr( 'y2', function( d ){
+                    return y( d.nextrely );
+                } );
 
-          var getElementDimensions = function () {
-            return { 'h': element.height(), 'w': element.width() };
-         };
+          dims=nodeSize=wSize=hSize=null;
+        }
+
+        var getElementDimensions = function () {
+          return { 'h': element.height(), 'w': element.width() };
+        };
 
         /* EVENTS RESPONSES*/
         var resetAll = function(){
               if( onUpdate ){
                 return;
               }
-              //if( !onUpdate ){
-                  svg.selectAll( '.cassiopeia-user' )
-                  .transition()
-                  .duration( scope.mediumTransitions )
-                  .style( 'opacity', .8 );
-              //}
+              svg.selectAll( '.cassiopeia-user' )
+              .transition()
+              .duration( scope.mediumTransitions )
+                .style( 'opacity', .8 );
           }
 
           var onOverPeriod = function( e,period ){
@@ -487,7 +489,7 @@ angular.module( 'cassiopeiaApp' )
                 } )
                 .transition()
                 .duration( scope.mediumTransitions )
-                .style( 'opacity', .3 );
+                  .style( 'opacity', .3 );
           };
 
           var onOverTweet = function( e,tweet ){
@@ -500,7 +502,7 @@ angular.module( 'cassiopeiaApp' )
                 } )
                 .transition()
                 .duration( scope.mediumTransitions )
-                .style( 'opacity', .3 )
+                  .style( 'opacity', .3 )
 
             svg.selectAll( '.cassiopeia-user' )
                 .filter( function( d ){
@@ -509,47 +511,45 @@ angular.module( 'cassiopeiaApp' )
                 .each( function( d ){
                     var index = 0;
                     for( var i in d.values ){
-                        if( d.values[i].id == tweet.id )
+                        if( d.values[i].id == tweet.id ){
                             index = +i;
+                        }
                     }
                     if( index == 0 ){
-                        d3.select( this )
-                        .selectAll( '.stroke,.shape' )
-                        .transition()
-                        .duration( scope.mediumTransitions )
-                        .style( 'opacity', 1 )
-                        .attr( 'r', function( d, i ){
-                            return .2 + radiusScale( d.values.length*8 );
-                        } )
-                        .each( 'end', function( d ){
-                            d3.select( this )
-                            .transition()
-                            .delay( scope.mediumTransitions )
-                            .duration( scope.mediumTransitions )
-                            .attr( 'r', function( d, i ){
-                                return .2 + radiusScale( d.values.length );
-                            } )
-                        } );
+                        d3.select( this ).selectAll( '.stroke,.shape' )
+                          .transition()
+                          .duration( scope.mediumTransitions )
+                            .style( 'opacity', 1 )
+                              .attr( 'r', function( d, i ){
+                                  return .2 + radiusScale( d.values.length*8 );
+                              } )
+                                .each( 'end', function( d ){
+                                    d3.select( this )
+                                      .transition()
+                                      .delay( scope.mediumTransitions )
+                                      .duration( scope.mediumTransitions )
+                                        .attr( 'r', function( d, i ){
+                                            return .2 + radiusScale( d.values.length );
+                                        } );
+                                } );
                     }else{
-                        d3.select( this )
-                        .selectAll( '.cassiopeia-tweet' )
-                        .filter( function( d ){
-                            return d.id == tweet.id;
-                        } )
-                        .select( '.mini-shape' )
-                        .transition()
-                        .duration( scope.mediumTransitions )
-                        .attr( 'd', 'M -12 0 L 0 -12 L 12 0 L 0 12 Z' )
-                        .each( 'end', function(){
-                            d3.select( this )
+                        d3.select( this ).selectAll( '.cassiopeia-tweet' )
+                          .filter( function( d ){
+                              return d.id == tweet.id;
+                          } ).select( '.mini-shape' )
                             .transition()
-                            .delay( scope.mediumTransitions )
                             .duration( scope.mediumTransitions )
-                            .attr( 'd', 'M -3 0 L 0 -3 L 3 0 L 0 3 Z' )
-                            .each( 'end', function(){
-                                d3.select( this ).attr( 'd', 'M -3 0 L 0 -3 L 3 0 L 0 3 Z' );
-                            } );
-                        } )
+                              .attr( 'd', 'M -12 0 L 0 -12 L 12 0 L 0 12 Z' )
+                                .each( 'end', function(){
+                                    d3.select( this )
+                                    .transition()
+                                    .delay( scope.mediumTransitions )
+                                    .duration( scope.mediumTransitions )
+                                      .attr( 'd', 'M -3 0 L 0 -3 L 3 0 L 0 3 Z' )
+                                        .each( 'end', function(){
+                                            d3.select( this ).attr( 'd', 'M -3 0 L 0 -3 L 3 0 L 0 3 Z' );
+                                        } );
+                                } );
                     }
                 } )
 

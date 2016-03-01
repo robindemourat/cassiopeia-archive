@@ -17,8 +17,6 @@ angular.module('cassiopeiaApp')
       },
       link: function (scope, element, attrs) {
 
-        //todo : set parametric long transition, short fast transition, max brush length
-
         var id = angular.element(element).attr('id'),
             container = d3.select('#' + id),
             visPercentHeight = 80,//height of vis regarding ticks (%)
@@ -294,11 +292,11 @@ angular.module('cassiopeiaApp')
               if(d3.select(this).style('opacity') != 1)
                 onBarHover(d);
                 y = (window.innerHeight - d3.event.pageY + 30);
-                x = (d3.event.pageX-tooltip1[0][0].offsetWidth/2);
+                x = (d3.event.pageX-angular.element(tooltip1[0][0]).width()/2);
               if(x < 20)
                 x = 20;
-              else if (x + tooltip1[0][0].offsetWidth > window.innerWidth)
-                x = window.innerWidth - tooltip1[0][0].offsetWidth - 20;
+              else if (x + angular.element(tooltip1[0][0]).width() > window.innerWidth)
+                x = window.innerWidth - angular.element(tooltip1[0][0]).width() - 20;
               tooltip1.style('opacity', 1).style('z-index', 5).style("bottom", y+"px").style("left",x+"px");
             })
             .on('mouseleave', onBarEndHover)
@@ -325,18 +323,6 @@ angular.module('cassiopeiaApp')
                 })
                 .style('opacity', 0e-1)
                   .remove();
-          /*exit
-            .select('.main-bar')
-            .transition()
-            .duration(scope.longTransitions * 10)
-            .attr('x', function(){
-              return 0.01;
-            })
-            .attr('y', function(){
-              return visPercentHeight + '%';
-            })
-            .attr('height', 0.01)
-            .attr('opacity', 0.01);*/
 
 
           //update

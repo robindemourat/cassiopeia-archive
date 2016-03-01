@@ -241,7 +241,7 @@ angular.module('cassiopeiaApp')
     $scope.getLocalData = function(timespan){
         $scope.loading = true;
         var dataRequest = '/api/slice/'+parseInt(timespan[0])+'/'+parseInt(timespan[1]);
-        console.info('launching local data request ', dataRequest);
+        // console.info('launching local data request ', dataRequest);
         $scope.fromDate = timespan[0];
         $scope.toDate = timespan[1];
         $scope.activeTimeSpan = $scope.toDate - $scope.fromDate;
